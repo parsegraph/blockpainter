@@ -1,6 +1,6 @@
 import Color from 'parsegraph-color';
 import Rect from 'parsegraph-rect';
-import {compileProgram, GLProvider} from 'parsegraph-compileprogram';
+import {compileProgram, GLProvider, ProxyGLProvider} from 'parsegraph-compileprogram';
 
 import blockPainterVertexShader from './BlockPainter_VertexShader.glsl';
 import blockPainterVertexShaderSimple from './BlockPainter_VertexShader_Simple.glsl';
@@ -18,9 +18,8 @@ import blockPainterFragmentShaderSimple from './BlockPainter_FragmentShader_Simp
 
 let blockPainterCount = 0;
 
-export default class BlockPainter {
-  _id: number;
-  _window: GLProvider;
+export default class BlockPainter extends ProxyGLProvider {
+  _id:number;
   _blockBuffer: number;
   _blockBufferNumVertices: number;
   _blockBufferVertexIndex: number;
@@ -48,11 +47,8 @@ export default class BlockPainter {
   simpleAColor: number;
 
   constructor(window: GLProvider) {
+    super(window);
     this._id = blockPainterCount++;
-    this._window = window;
-    if (!this._window) {
-      throw new Error('Window or other GLProvider must be given');
-    }
 
     // Prepare buffer using prepare(numBlocks).
     // BlockPainter supports a fixed number of blocks.
@@ -118,7 +114,7 @@ export default class BlockPainter {
     if (this._blockBuffer) {
       this.clear();
     }
-    const gl = this._window.gl();
+    const gl = this.gl();
     this._blockBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this._blockBuffer);
     gl.bufferData(
@@ -130,7 +126,7 @@ export default class BlockPainter {
   }
 
   clear(): void {
-    const gl = this._window.gl();
+    const gl = this.gl();
     if (this._blockBuffer && !gl.isContextLost()) {
       gl.deleteBuffer(this._blockBuffer);
     }
@@ -154,7 +150,7 @@ export default class BlockPainter {
     if (this._dataBufferVertexIndex === 0) {
       return;
     }
-    const gl = this._window.gl();
+    const gl = this.gl();
     const stride: number = this._stride;
     gl.bindBuffer(gl.ARRAY_BUFFER, this._blockBuffer);
 
@@ -209,7 +205,7 @@ export default class BlockPainter {
       borderThickness: number,
       borderScale: number,
   ): void {
-    const gl = this._window.gl();
+    const gl = this.gl();
     if (gl.isContextLost()) {
       return;
     }
@@ -315,8 +311,12 @@ export default class BlockPainter {
     this._maxSize = Math.max(this._maxSize, Math.max(width, height));
   }
 
+  id(): string {
+    return "" + this._id;
+  }
+
   toString(): string {
-    return '[BlockPainter ' + this._id + ']';
+    return '[BlockPainter ' + this.id() + ']';
   }
 
   contextChanged(isLost: boolean) {
@@ -332,7 +332,7 @@ export default class BlockPainter {
     if (this._blockBufferVertexIndex === 0) {
       return;
     }
-    const gl = this._window.gl();
+    const gl = this.gl();
     const usingSimple = forceSimple || this._maxSize * scale < 5;
     // console.log(this._id, this._maxSize * scale, usingSimple);
 
@@ -346,7 +346,7 @@ export default class BlockPainter {
         fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
       }
       this._blockProgram = compileProgram(
-          this._window,
+          this.glProvider(),
           'BlockPainter',
           blockPainterVertexShader,
           fragProgram,
@@ -377,7 +377,7 @@ export default class BlockPainter {
     }
     if (this._blockProgramSimple === null) {
       this._blockProgramSimple = compileProgram(
-          this._window,
+          this.glProvider(),
           'BlockPainterSimple',
           blockPainterVertexShaderSimple,
           blockPainterFragmentShaderSimple,
