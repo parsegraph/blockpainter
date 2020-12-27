@@ -1,8 +1,10 @@
 DIST_NAME = blockpainter
 
-SCRIPT_FILES = \
+SOURCES = \
 	src/index.ts \
-	src/BlockPainter.ts \
+	src/BlockPainter.ts
+
+SHADERS = \
 	src/BlockPainter_VertexShader.glsl \
 	src/BlockPainter_FragmentShader.glsl \
 	src/BlockPainter_AngleFragmentShader.glsl \
@@ -13,6 +15,8 @@ SCRIPT_FILES = \
 	src/BlockPainter_FragmentShader_Simple.glsl \
 	src/BlockPainter_ParenthesisFragmentShader.glsl \
 	src/BlockPainter_FragmentShader_OES_standard_derivatives.glsl
+
+SCRIPT_FILES = $(SOURCES) $(SHADERS)
 
 all: build lint test coverage esdoc
 
@@ -39,7 +43,7 @@ prettier:
 .PHONY: prettier
 
 lint:
-	npx eslint --fix $(SCRIPT_FILES)
+	npx eslint --fix $(SOURCES)
 .PHONY: lint
 
 esdoc:
