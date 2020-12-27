@@ -4,9 +4,9 @@ module.exports = {
   entry: path.resolve(__dirname, "src/index.ts"),
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "TODO-PACKAGE-NAME.js",
+    filename: "blockpainter.js",
     globalObject: "this",
-    library: "TODO-PACKAGE-NAME",
+    library: "blockpainter",
     libraryTarget: "umd",
   },
   module: {
