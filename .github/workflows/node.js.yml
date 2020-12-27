@@ -24,7 +24,7 @@ jobs:
     - run: make
     - run: |
         mkdir parsegraph-blockpainter
-        cp -r -t parsegraph-blockpainter package.json package-lock.json README.md demo/ LICENSE dist/
+        cp -r -t parsegraph-blockpainter package.json package-lock.json README.md demo/ LICENSE dist/ www/
         tar cvzf parsegraph-blockpainter.tar.gz parsegraph-blockpainter/
     - uses: actions/upload-artifact@v2
       with:
