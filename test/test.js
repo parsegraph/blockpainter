@@ -1,8 +1,8 @@
 var assert = require("assert");
-import todo from "../dist/blockpainter";
+import BlockPainter from "../dist/blockpainter";
 
 describe("Package", function () {
   it("works", ()=>{
-    assert.equal(todo(), 42);
+    assert.ok(new BlockPainter());
   });
 });
