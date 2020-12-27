@@ -1,7 +1,18 @@
 DIST_NAME = blockpainter
 
 SCRIPT_FILES = \
-	src/index.ts
+	src/index.ts \
+	src/BlockPainter.ts \
+	src/BlockPainter_VertexShader.glsl \
+	src/BlockPainter_FragmentShader.glsl \
+	src/BlockPainter_AngleFragmentShader.glsl \
+	src/BlockPainter_CurlyFragmentShader.glsl \
+	src/BlockPainter_ShadyFragmentShader.glsl \
+	src/BlockPainter_VertexShader_Simple.glsl \
+	src/BlockPainter_SquareFragmentShader.glsl \
+	src/BlockPainter_FragmentShader_Simple.glsl \
+	src/BlockPainter_ParenthesisFragmentShader.glsl \
+	src/BlockPainter_FragmentShader_OES_standard_derivatives.glsl
 
 all: build lint test coverage esdoc
 
