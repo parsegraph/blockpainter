@@ -70,6 +70,7 @@
     "esdoc-typescript-plugin": "^1.0.1",
     "express": "^4.17.1",
     "glslify-loader": "^2.0.0",
+    "node-canvas-webgl": "^0.2.6",
     "openssl": "^1.1.0",
     "parsegraph-color": "^1.4.0",
     "parsegraph-compileprogram": "^2.0.0",
