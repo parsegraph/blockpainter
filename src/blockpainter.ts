@@ -1,6 +1,6 @@
+import {compileProgram, GLProvider, ProxyGLProvider, BasicGLProvider} from 'parsegraph-compileprogram';
 import Color from 'parsegraph-color';
 import Rect from 'parsegraph-rect';
-import {compileProgram, GLProvider, ProxyGLProvider} from 'parsegraph-compileprogram';
 
 import blockPainterVertexShader from './BlockPainter_VertexShader.glsl';
 import blockPainterVertexShaderSimple from './BlockPainter_VertexShader_Simple.glsl';
@@ -20,21 +20,21 @@ let blockPainterCount = 0;
 
 export default class BlockPainter extends ProxyGLProvider {
   _id:number;
-  _blockBuffer: number;
+  _blockBuffer: WebGLBuffer;
   _blockBufferNumVertices: number;
   _blockBufferVertexIndex: number;
   _backgroundColor: Color;
   _borderColor: Color;
   _bounds: Rect;
-  _blockProgram: number;
-  _blockProgramSimple: number;
+  _blockProgram: WebGLProgram;
+  _blockProgramSimple: WebGLProgram;
   _stride: number;
   _vertexBuffer: Float32Array;
   _dataBufferVertexIndex: number;
   _dataBufferNumVertices: number;
   _dataBuffer: Float32Array;
   _maxSize: number;
-  uWorld: number;
+  uWorld: WebGLUniformLocation;
   aPosition: number;
   aTexCoord: number;
   aColor: number;
@@ -42,7 +42,7 @@ export default class BlockPainter extends ProxyGLProvider {
   aBorderRoundedness: number;
   aBorderThickness: number;
   aAspectRatio: number;
-  simpleUWorld: number;
+  simpleUWorld: WebGLUniformLocation;
   simpleAPosition: number;
   simpleAColor: number;
 
@@ -353,24 +353,24 @@ export default class BlockPainter extends ProxyGLProvider {
       );
 
       // Cache program locations.
-      this.u_world = gl.getUniformLocation(this._blockProgram, 'u_world');
+      this.uWorld = gl.getUniformLocation(this._blockProgram, 'u_world');
 
-      this.a_position = gl.getAttribLocation(this._blockProgram, 'a_position');
-      this.a_texCoord = gl.getAttribLocation(this._blockProgram, 'a_texCoord');
-      this.a_color = gl.getAttribLocation(this._blockProgram, 'a_color');
-      this.a_borderColor = gl.getAttribLocation(
+      this.aPosition = gl.getAttribLocation(this._blockProgram, 'a_position');
+      this.aTexCoord = gl.getAttribLocation(this._blockProgram, 'a_texCoord');
+      this.aColor = gl.getAttribLocation(this._blockProgram, 'a_color');
+      this.aBorderColor = gl.getAttribLocation(
           this._blockProgram,
           'a_borderColor',
       );
-      this.a_borderRoundedness = gl.getAttribLocation(
+      this.aBorderRoundedness = gl.getAttribLocation(
           this._blockProgram,
           'a_borderRoundedness',
       );
-      this.a_borderThickness = gl.getAttribLocation(
+      this.aBorderThickness = gl.getAttribLocation(
           this._blockProgram,
           'a_borderThickness',
       );
-      this.a_aspectRatio = gl.getAttribLocation(
+      this.aAspectRatio = gl.getAttribLocation(
           this._blockProgram,
           'a_aspectRatio',
       );
@@ -382,15 +382,15 @@ export default class BlockPainter extends ProxyGLProvider {
           blockPainterVertexShaderSimple,
           blockPainterFragmentShaderSimple,
       );
-      this.simple_u_world = gl.getUniformLocation(
+      this.simpleUWorld = gl.getUniformLocation(
           this._blockProgramSimple,
           'u_world',
       );
-      this.simple_a_position = gl.getAttribLocation(
+      this.simpleAPosition = gl.getAttribLocation(
           this._blockProgramSimple,
           'a_position',
       );
-      this.simple_a_color = gl.getAttribLocation(
+      this.simpleAColor = gl.getAttribLocation(
           this._blockProgramSimple,
           'a_color',
       );
@@ -398,19 +398,19 @@ export default class BlockPainter extends ProxyGLProvider {
 
     if (usingSimple) {
       gl.useProgram(this._blockProgramSimple);
-      gl.uniformMatrix3fv(this.simple_u_world, false, world);
-      gl.enableVertexAttribArray(this.simple_a_position);
-      gl.enableVertexAttribArray(this.simple_a_color);
+      gl.uniformMatrix3fv(this.simpleUWorld, false, world);
+      gl.enableVertexAttribArray(this.simpleAPosition);
+      gl.enableVertexAttribArray(this.simpleAColor);
     } else {
       gl.useProgram(this._blockProgram);
-      gl.uniformMatrix3fv(this.u_world, false, world);
-      gl.enableVertexAttribArray(this.a_position);
-      gl.enableVertexAttribArray(this.a_texCoord);
-      gl.enableVertexAttribArray(this.a_color);
-      gl.enableVertexAttribArray(this.a_borderColor);
-      gl.enableVertexAttribArray(this.a_borderRoundedness);
-      gl.enableVertexAttribArray(this.a_borderThickness);
-      gl.enableVertexAttribArray(this.a_aspectRatio);
+      gl.uniformMatrix3fv(this.uWorld, false, world);
+      gl.enableVertexAttribArray(this.aPosition);
+      gl.enableVertexAttribArray(this.aTexCoord);
+      gl.enableVertexAttribArray(this.aColor);
+      gl.enableVertexAttribArray(this.aBorderColor);
+      gl.enableVertexAttribArray(this.aBorderRoundedness);
+      gl.enableVertexAttribArray(this.aBorderThickness);
+      gl.enableVertexAttribArray(this.aAspectRatio);
     }
 
     const stride = this._stride;
@@ -431,7 +431,7 @@ export default class BlockPainter extends ProxyGLProvider {
     // AspectRa: 1 * 4 (one float)   56-59
     if (usingSimple) {
       gl.vertexAttribPointer(
-          this.simple_a_position,
+          this.simpleAPosition,
           2,
           gl.FLOAT,
           false,
@@ -439,7 +439,7 @@ export default class BlockPainter extends ProxyGLProvider {
           0,
       );
       gl.vertexAttribPointer(
-          this.simple_a_color,
+          this.simpleAColor,
           4,
           gl.FLOAT,
           false,
@@ -447,11 +447,11 @@ export default class BlockPainter extends ProxyGLProvider {
           16,
       );
     } else {
-      gl.vertexAttribPointer(this.a_position, 2, gl.FLOAT, false, stride, 0);
-      gl.vertexAttribPointer(this.a_texCoord, 2, gl.FLOAT, false, stride, 8);
-      gl.vertexAttribPointer(this.a_color, 4, gl.FLOAT, false, stride, 16);
+      gl.vertexAttribPointer(this.aPosition, 2, gl.FLOAT, false, stride, 0);
+      gl.vertexAttribPointer(this.aTexCoord, 2, gl.FLOAT, false, stride, 8);
+      gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, false, stride, 16);
       gl.vertexAttribPointer(
-          this.a_borderColor,
+          this.aBorderColor,
           4,
           gl.FLOAT,
           false,
@@ -459,7 +459,7 @@ export default class BlockPainter extends ProxyGLProvider {
           32,
       );
       gl.vertexAttribPointer(
-          this.a_borderRoundedness,
+          this.aBorderRoundedness,
           1,
           gl.FLOAT,
           false,
@@ -467,7 +467,7 @@ export default class BlockPainter extends ProxyGLProvider {
           48,
       );
       gl.vertexAttribPointer(
-          this.a_borderThickness,
+          this.aBorderThickness,
           1,
           gl.FLOAT,
           false,
@@ -475,7 +475,7 @@ export default class BlockPainter extends ProxyGLProvider {
           52,
       );
       gl.vertexAttribPointer(
-          this.a_aspectRatio,
+          this.aAspectRatio,
           1,
           gl.FLOAT,
           false,
@@ -488,16 +488,20 @@ export default class BlockPainter extends ProxyGLProvider {
     gl.drawArrays(gl.TRIANGLES, 0, this._blockBufferVertexIndex);
 
     if (usingSimple) {
-      gl.disableVertexAttribArray(this.simple_a_position);
-      gl.disableVertexAttribArray(this.simple_a_color);
+      gl.disableVertexAttribArray(this.simpleAPosition);
+      gl.disableVertexAttribArray(this.simpleAColor);
     } else {
-      gl.disableVertexAttribArray(this.a_position);
-      gl.disableVertexAttribArray(this.a_texCoord);
-      gl.disableVertexAttribArray(this.a_color);
-      gl.disableVertexAttribArray(this.a_borderColor);
-      gl.disableVertexAttribArray(this.a_borderRoundedness);
-      gl.disableVertexAttribArray(this.a_borderThickness);
-      gl.disableVertexAttribArray(this.a_aspectRatio);
+      gl.disableVertexAttribArray(this.aPosition);
+      gl.disableVertexAttribArray(this.aTexCoord);
+      gl.disableVertexAttribArray(this.aColor);
+      gl.disableVertexAttribArray(this.aBorderColor);
+      gl.disableVertexAttribArray(this.aBorderRoundedness);
+      gl.disableVertexAttribArray(this.aBorderThickness);
+      gl.disableVertexAttribArray(this.aAspectRatio);
     }
   }
+}
+
+export {
+  GLProvider, ProxyGLProvider, BasicGLProvider, Color
 }
