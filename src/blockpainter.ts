@@ -16,6 +16,8 @@ import blockPainterFragmentShaderSimple from './BlockPainter_FragmentShader_Simp
 // import BlockPainter_ParenthesisFragmentShader from './BlockPainter_ParenthesisFragmentShader.glsl';
 // import BlockPainter_CurlyFragmentShader from './BlockPainter_CurlyFragmentShader.glsl';
 
+import {Matrix3x3} from 'parsegraph-matrix';
+
 let blockPainterCount = 0;
 
 export default class BlockPainter extends ProxyGLProvider {
@@ -327,7 +329,7 @@ export default class BlockPainter extends ProxyGLProvider {
     }
   }
 
-  render(world: number[], scale: number, forceSimple?: boolean) {
+  render(world: Matrix3x3, scale: number, forceSimple?: boolean) {
     this.flush();
     if (this._blockBufferVertexIndex === 0) {
       return;
