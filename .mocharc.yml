@@ -4,7 +4,7 @@ require:
 recursive: true
 color: true
 exit: true
-timeout: 5000
+timeout: 30000
 extension:
   - js
   - ts
