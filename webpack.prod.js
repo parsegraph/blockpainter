@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   entry: path.resolve(__dirname, "src/blockpainter.ts"),
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist-prod"),
     filename: "parsegraph-blockpainter.js",
     globalObject: "this",
     library: "parsegraph",
@@ -12,21 +12,25 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|ts|tsx?)$/,
+        test: /\.(js)$/,
         exclude: /node_modules/,
-        loader: ['babel-loader', 'ts-loader']
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(glsl|vs|fs|vert|frag)$/,
         exclude: /node_modules/,
         use: ["ts-shader-loader"],
-      },
+      }
     ],
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".glsl"],
     modules: [path.resolve(__dirname, "src"), "node_modules"],
   },
-  mode: "development",
-  devtool: "eval-source-map",
+  mode: "production",
 };

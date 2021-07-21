@@ -1,0 +1,17 @@
+{
+    "name": "parsegraph-blockpainter",
+    "version": "1.4.4",
+    "description": "blockpainter",
+    "main": "dist/parsegraph-blockpainter.js",
+    "types": "dist/parsegraph-blockpainter.d.ts",
+    "repository": {
+      "type": "git",
+      "url": "git+ssh://git@github.com/parsegraph/blockpainter.git"
+    },
+    "author": "Rainback, Inc.",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/parsegraph/blockpainter/issues"
+    },
+    "homepage": "https://github.com/parsegraph/blockpainter#readme"
+  }
