@@ -1,6 +1,6 @@
 {
   "name": "parsegraph-blockpainter",
-  "version": "1.4.5-dev",
+  "version": "1.4.6-dev",
   "description": "blockpainter",
   "main": "dist/parsegraph-blockpainter.js",
   "types": "dist/parsegraph-blockpainter.d.ts",
@@ -73,7 +73,7 @@
     "node-canvas-webgl": "^0.2.6",
     "openssl": "^1.1.0",
     "parsegraph-color": "^1.4.3",
-    "parsegraph-compileprogram": "^2.0.5",
+    "parsegraph-compileprogram": "^2.0.7",
     "parsegraph-matrix": "^1.4.7",
     "parsegraph-rect": "^1.4.4",
     "parsegraph-testsuite": "^1.4.3",
