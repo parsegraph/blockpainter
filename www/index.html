@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="blockpainter.js"></script>
+    <script src="parsegraph-blockpainter.js"></script>
 </head>
 <body>
     <table>
@@ -44,7 +44,7 @@
 <script>
     let ctx = null;
     document.addEventListener("DOMContentLoaded", function() {
-        ctx = new blockpainter.BasicGLProvider();
+        ctx = new parsegraph.BasicGLProvider();
         document.getElementById("gl").appendChild(ctx.container());
         redraw();
     });
@@ -71,7 +71,7 @@
     function redraw() {
       requestAnimationFrame(()=>{
         if (!bp) {
-          bp = new blockpainter.default(ctx);
+          bp = new parsegraph.default(ctx);
         }
         bp.initBuffer(1);
 
@@ -82,8 +82,8 @@
         const borderRoundedness = getFormValue("borderRoundedness");
         const borderThickness = getFormValue("borderThickness");
         const borderScale = getFormValue("borderScale");
-        bp.setBackgroundColor(new blockpainter.Color(1, 1, 0, 1));
-        bp.setBorderColor(new blockpainter.Color(1, 0, 0, 1));
+        bp.setBackgroundColor(new parsegraph.Color(1, 1, 0, 1));
+        bp.setBorderColor(new parsegraph.Color(1, 0, 0, 1));
         bp.drawBlock(cx, cy, width, height, borderRoundedness, borderThickness, borderScale);
         const gl = ctx.gl();
         gl.enable(gl.BLEND);
