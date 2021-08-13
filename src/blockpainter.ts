@@ -1,10 +1,13 @@
-import {compileProgram, GLProvider, ProxyGLProvider, BasicGLProvider} from 'parsegraph-compileprogram';
+import {GLProvider, ProxyGLProvider, BasicGLProvider} from 'parsegraph-compileprogram';
 import Color from 'parsegraph-color';
 import Rect from 'parsegraph-rect';
 
 import blockPainterVertexShader from './BlockPainter_VertexShader.glsl';
 import blockPainterVertexShaderSimple from './BlockPainter_VertexShader_Simple.glsl';
 import blockPainterFragmentShader from './BlockPainter_FragmentShader.glsl';
+
+import checkGLError, {ignoreGLErrors, setIgnoreGLErrors} from 'parsegraph-checkglerror';
+
 
 // Same as above, but using a better antialiasing technique.
 import blockPainterFragmentShaderOESStandardDerivatives from './BlockPainter_FragmentShader_OES_standard_derivatives.glsl';
@@ -19,6 +22,123 @@ import blockPainterFragmentShaderSimple from './BlockPainter_FragmentShader_Simp
 import {Matrix3x3} from 'parsegraph-matrix';
 
 let blockPainterCount = 0;
+
+function compileShader(gl:WebGLRenderingContext, shaderSource:string, shaderType:number, shaderName?:string):WebGLShader {
+  // Create the shader object
+  const shader = gl.createShader(shaderType);
+
+  // Set the shader source code.
+  gl.shaderSource(shader, shaderSource);
+
+  // Compile the shader
+  gl.compileShader(shader);
+
+  // Check if it compiled
+  if (!ignoreGLErrors()) {
+    const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (!success) {
+      // Something went wrong during compilation; get the error
+      throw new Error(
+          'Could not compile ' +
+          (shaderType === gl.FRAGMENT_SHADER ? 'fragment' : 'vertex') +
+          ' shader ' +
+          shaderName +
+          ': ' +
+          gl.getShaderInfoLog(shader),
+      );
+    }
+  }
+
+  return shader;
+}
+
+function compileProgram(
+    window:GLProvider,
+    shaderName:string,
+    vertexShader:string,
+    fragShader:string,
+) {
+  const gl = window.gl();
+  const shaders = window.shaders();
+  if (gl.isContextLost()) {
+    return;
+  }
+  if (shaders[shaderName]) {
+    return shaders[shaderName];
+  }
+
+  const program = gl.createProgram();
+  checkGLError(
+      gl,
+      'compileProgram.createProgram(shaderName=\'',
+      shaderName,
+      ')',
+  );
+
+  const compiledVertexShader = compileShader(
+      gl,
+      vertexShader,
+      gl.VERTEX_SHADER,
+      shaderName,
+  );
+  checkGLError(
+      gl,
+      'compileProgram.compile vertex shader(shaderName=\'',
+      shaderName,
+      ')',
+  );
+
+  gl.attachShader(program, compiledVertexShader);
+  checkGLError(
+      gl,
+      'compileProgram.attach vertex shader(shaderName=\'',
+      shaderName,
+      ')',
+  );
+
+  const compiledFragmentShader = compileShader(
+      gl,
+      fragShader,
+      gl.FRAGMENT_SHADER,
+      shaderName,
+  );
+  checkGLError(
+      gl,
+      'compileProgram.compile fragment shader(shaderName=\'',
+      shaderName,
+      ')',
+  );
+  gl.attachShader(program, compiledFragmentShader);
+  checkGLError(
+      gl,
+      'compileProgram.attach fragment shader(shaderName=\'',
+      shaderName,
+      ')',
+  );
+
+  gl.linkProgram(program);
+  if (!ignoreGLErrors()) {
+    const st = gl.getProgramParameter(program, gl.LINK_STATUS);
+    if (!st) {
+      throw new Error(
+          '\'' +
+          shaderName +
+          '\' shader program failed to link:\n' +
+          gl.getProgramInfoLog(program),
+      );
+    }
+    const err = gl.getError();
+    if (err != gl.NO_ERROR && err != gl.CONTEXT_LOST_WEBGL) {
+      throw new Error(
+          '\'' + shaderName + '\' shader program failed to link: ' + err,
+      );
+    }
+  }
+
+  shaders[shaderName] = program;
+  // console.log("Created shader for " + shaderName + ": " + program);
+  return program;
+}
 
 export default class BlockPainter extends ProxyGLProvider {
   _id:number;
@@ -339,6 +459,10 @@ export default class BlockPainter extends ProxyGLProvider {
     // console.log(this._id, this._maxSize * scale, usingSimple);
 
     if (this._blockProgram === null) {
+      setIgnoreGLErrors(false);
+      console.log(ignoreGLErrors());
+      console.log(blockPainterFragmentShader);
+
       let fragProgram = blockPainterFragmentShader;
       // Avoid OES_standard_derivatives on Firefox.
       if (
