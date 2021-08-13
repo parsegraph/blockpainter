@@ -28,7 +28,7 @@ void main() {
         borderRoundedness + borderTolerance,
         d
     );
-    highp float edgeWidth = 0.0
+    highp float edgeWidth = 0.0;
     highp float inContent = 1.0 - smoothstep(
         (borderRoundedness - borderThickness) - edgeWidth,
         (borderRoundedness - borderThickness) + edgeWidth,
