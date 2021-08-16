@@ -352,7 +352,7 @@ export default class BlockPainter extends ProxyGLProvider {
         navigator.userAgent.indexOf('Firefox') == -1 &&
         gl.getExtension('OES_standard_derivatives') != null
       ) {
-        fragProgram = blockPainterFragmentShader;
+        fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
       }
       this._blockProgram = compileProgram(
           this.glProvider(),
