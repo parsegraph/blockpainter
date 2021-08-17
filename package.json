@@ -1,6 +1,6 @@
 {
   "name": "parsegraph-blockpainter",
-  "version": "1.4.9-dev",
+  "version": "1.4.10-dev",
   "description": "blockpainter",
   "main": "dist/parsegraph-blockpainter.js",
   "types": "dist/parsegraph-blockpainter.d.ts",
@@ -65,7 +65,7 @@
     "nyc": "^15.1.0",
     "openssl": "^1.1.0",
     "parsegraph-color": "^1.4.3",
-    "parsegraph-compileprogram": "^2.0.14-dev",
+    "parsegraph-compileprogram": "^2.0.15",
     "parsegraph-matrix": "^1.4.7",
     "parsegraph-rect": "^1.4.4",
     "parsegraph-testsuite": "^1.4.3",
@@ -83,6 +83,6 @@
     "webpack-cli": "^3.3.12"
   },
   "peerDependencies": {
-    "parsegraph-checkglerror": "^1.4.7-dev"
+    "parsegraph-checkglerror": "^1.4.8"
   }
 }
