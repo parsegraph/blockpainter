@@ -15,8 +15,8 @@
     },
     "homepage": "https://github.com/parsegraph/blockpainter#readme",
     "dependencies": {
-      "parsegraph-color": "^1.4.3",
-      "parsegraph-compileprogram": "^2.0.7",
+      "parsegraph-color": "^1.4.4",
+      "parsegraph-compileprogram": "^2.0.16",
       "parsegraph-matrix": "^1.4.7",
       "parsegraph-rect": "^1.4.4"
     }
