@@ -9,19 +9,66 @@ import Rect from "parsegraph-rect";
 
 import blockPainterVertexShader from "./BlockPainter_VertexShader.glsl";
 import blockPainterVertexShaderSimple from "./BlockPainter_VertexShader_Simple.glsl";
-import blockPainterFragmentShader from "./BlockPainter_FragmentShader.glsl";
 
 // Same as above, but using a better antialiasing technique.
 import blockPainterFragmentShaderOESStandardDerivatives from "./BlockPainter_FragmentShader_OES_standard_derivatives.glsl";
 
 import blockPainterFragmentShaderSimple from "./BlockPainter_FragmentShader_Simple.glsl";
-// import BlockPainter_SquareFragmentShader from './BlockPainter_SquareFragmentShader.glsl';
-// import BlockPainter_ShadyFragmentShader from './BlockPainter_ShadyFragmentShader.glsl';
-// import BlockPainter_AngleFragmentShader from './BlockPainter_AngleFragmentShader.glsl';
-// import BlockPainter_ParenthesisFragmentShader from './BlockPainter_ParenthesisFragmentShader.glsl';
-// import BlockPainter_CurlyFragmentShader from './BlockPainter_CurlyFragmentShader.glsl';
+
+import blockPainterRoundedFragmentShader from "./BlockPainter_FragmentShader.glsl";
+import blockPainterSquareFragmentShader from "./BlockPainter_SquareFragmentShader.glsl";
+import blockPainterShadyFragmentShader from "./BlockPainter_ShadyFragmentShader.glsl";
+import blockPainterAngleFragmentShader from "./BlockPainter_AngleFragmentShader.glsl";
+import blockPainterParenthesisFragmentShader from "./BlockPainter_ParenthesisFragmentShader.glsl";
+import blockPainterCurlyFragmentShader from "./BlockPainter_CurlyFragmentShader.glsl";
 
 import { Matrix3x3 } from "parsegraph-matrix";
+
+export enum BlockType {
+  ROUNDED,
+  SQUARE,
+  SHADY,
+  ANGLE,
+  PARENTHESIS,
+  CURLY,
+}
+
+export function getBlockPainterShader(
+  gl: WebGLRenderingContext,
+  blockType: BlockType
+) {
+  let fragProgram: string;
+  switch (blockType) {
+    case BlockType.ROUNDED:
+      fragProgram = blockPainterRoundedFragmentShader;
+      // Avoid OES_standard_derivatives on Firefox.
+      if (
+        navigator.userAgent.indexOf("Firefox") == -1 &&
+        gl.getExtension("OES_standard_derivatives") != null
+      ) {
+        fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
+      }
+      break;
+    case BlockType.SQUARE:
+      fragProgram = blockPainterSquareFragmentShader;
+      break;
+    case BlockType.SHADY:
+      fragProgram = blockPainterShadyFragmentShader;
+      break;
+    case BlockType.ANGLE:
+      fragProgram = blockPainterAngleFragmentShader;
+      break;
+    case BlockType.PARENTHESIS:
+      fragProgram = blockPainterParenthesisFragmentShader;
+      break;
+    case BlockType.CURLY:
+      fragProgram = blockPainterCurlyFragmentShader;
+      break;
+    default:
+      throw new Error("Unsupported block type: " + blockType);
+  }
+  return fragProgram;
+}
 
 let blockPainterCount = 0;
 
@@ -41,6 +88,7 @@ export default class BlockPainter extends ProxyGLProvider {
   _dataBufferNumVertices: number;
   _dataBuffer: Float32Array;
   _maxSize: number;
+  _blockType: BlockType;
   uWorld: WebGLUniformLocation;
   aPosition: number;
   aTexCoord: number;
@@ -53,7 +101,7 @@ export default class BlockPainter extends ProxyGLProvider {
   simpleAPosition: number;
   simpleAColor: number;
 
-  constructor(window: GLProvider) {
+  constructor(window: GLProvider, blockType: BlockType = BlockType.ROUNDED) {
     super(window);
     this._id = blockPainterCount++;
 
@@ -89,6 +137,8 @@ export default class BlockPainter extends ProxyGLProvider {
     );
 
     this._maxSize = 0;
+
+    this._blockType = blockType;
   }
 
   bounds(): Rect {
@@ -97,6 +147,10 @@ export default class BlockPainter extends ProxyGLProvider {
 
   borderColor(): Color {
     return this._borderColor;
+  }
+
+  setBlockType(blockType: BlockType) {
+    this._blockType = blockType;
   }
 
   setBorderColor(borderColor: Color): void {
@@ -344,18 +398,8 @@ export default class BlockPainter extends ProxyGLProvider {
     // console.log(this._id, this._maxSize * scale, usingSimple);
 
     if (this._blockProgram === null) {
-      //setIgnoreGLErrors(false);
-      //console.log(ignoreGLErrors());
-      //console.log(blockPainterFragmentShader);
+      const fragProgram = getBlockPainterShader(gl, this._blockType);
 
-      let fragProgram = blockPainterFragmentShader;
-      // Avoid OES_standard_derivatives on Firefox.
-      if (
-        navigator.userAgent.indexOf("Firefox") == -1 &&
-        gl.getExtension("OES_standard_derivatives") != null
-      ) {
-        fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
-      }
       this._blockProgram = compileProgram(
         this.glProvider(),
         "BlockPainter",
