@@ -11,11 +11,6 @@ import blockPainterVertexShader from "./BlockPainter_VertexShader.glsl";
 import blockPainterVertexShaderSimple from "./BlockPainter_VertexShader_Simple.glsl";
 import blockPainterFragmentShader from "./BlockPainter_FragmentShader.glsl";
 
-import checkGLError, {
-  ignoreGLErrors,
-  setIgnoreGLErrors,
-} from "parsegraph-checkglerror";
-
 // Same as above, but using a better antialiasing technique.
 import blockPainterFragmentShaderOESStandardDerivatives from "./BlockPainter_FragmentShader_OES_standard_derivatives.glsl";
 
@@ -349,9 +344,9 @@ export default class BlockPainter extends ProxyGLProvider {
     // console.log(this._id, this._maxSize * scale, usingSimple);
 
     if (this._blockProgram === null) {
-      setIgnoreGLErrors(false);
-      console.log(ignoreGLErrors());
-      console.log(blockPainterFragmentShader);
+      //setIgnoreGLErrors(false);
+      //console.log(ignoreGLErrors());
+      //console.log(blockPainterFragmentShader);
 
       let fragProgram = blockPainterFragmentShader;
       // Avoid OES_standard_derivatives on Firefox.
