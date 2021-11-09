@@ -23,6 +23,9 @@ void main() {
     if(st.y < 1.0 - borderThickness && st.x < 1.0 - borderThickness) {
         gl_FragColor = contentColor;
     } else {
-        "gl_FragColor = borderColor;
+        gl_FragColor = borderColor;
     }
+    highp float cornerFunc = -st.x+(1.0 - borderRoundedness*borderThickness)*2.0;
+    highp float inCorner = step(0.0, cornerFunc - st.y);
+    gl_FragColor = mix(vec4(0.0, 0.0, 0.0, 0.0), gl_FragColor, step(1.0, inCorner));
 }
