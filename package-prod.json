@@ -19,5 +19,8 @@
       "parsegraph-compileprogram": "^2.0.16",
       "parsegraph-matrix": "^1.4.7",
       "parsegraph-rect": "^1.4.4"
+    },
+    "peerDependencies": {
+    "parsegraph-checkglerror": "^1.5.0"
     }
   }
