@@ -165,6 +165,10 @@ export default class BlockPainter extends ProxyGLProvider {
   }
 
   setBlockType(blockType: BlockType) {
+    if (this._blockType === blockType) {
+      return;
+    }
+    this._blockProgram = null;
     this._blockType = blockType;
   }
 
@@ -417,7 +421,7 @@ export default class BlockPainter extends ProxyGLProvider {
 
       this._blockProgram = compileProgram(
         this.glProvider(),
-        "BlockPainter",
+        "BlockPainter-" + nameBlockType(this._blockType),
         blockPainterVertexShader,
         fragProgram
       );
