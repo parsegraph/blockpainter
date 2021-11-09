@@ -14,25 +14,40 @@ varying highp float borderThickness;
 varying highp float aspectRatio;
 
 void main() {
-    // Adjust for the aspect ratio.
     highp vec2 st = texCoord;
+
+    // Move origin to (0, 0) with size=2
     st = st * 2.0 - 1.0;
+
+    // Adjust for the aspect ratio.
+    st.x = mix(st.x, pow(abs(st.x), 1.0/aspectRatio), step(aspectRatio, 1.0));
+    st.y = mix(st.y, pow(abs(st.y), aspectRatio), 1.0 - step(aspectRatio, 1.0));
+
+    // Flatten to positive quadrant.
     st.x = abs(st.x);
-    st.y = abs(st.y);"
+    st.y = abs(st.y);
 
-    // 1.0 if st is inside the X-axis border.
-    highp float t = borderThickness;
-    highp float insideYContent = 1.0 - step(1.0 - t, st.y);
-    highp float insideXBorder = step(1.0 - t, st.x);
+    highp float minRoundness = 0.01;
+    highp float roundness = max(minRoundness, borderRoundedness);
 
-    // y = y1 + m(x - x1)
-    highp float insideBorderAngle = 1.0 - step((st.x - 1.0)/-t, st.y);
-    highp float insideContentAngle = 1.0 - step((st.x - 1.0)/-t - aspectRatio, st.y);
+    // Calculate the Y position of the border at the given X
+    highp float borderAngle = 1.0/roundness;
+    highp float borderFunc = -borderAngle*st.x+1.0/roundness;
 
-    highp float inBorder = step(1.0, insideBorderAngle);
-    highp float inContent = step(1.0, insideContentAngle * insideYContent);
+    // The given position is within the angle if it is under borderFunc.
+    highp float inBorder = step(0.0, borderFunc - st.y);
+
+    // Determine the content's border by adjusting the borderFunc value.
+    highp float contentFunc = borderFunc - borderThickness;
+
+    // The given position is within the angle's content if it is under contentFunc.
+    highp float inContent = step(0.0, contentFunc - st.y);
+
+    // Calculate whether the given position is under the latitude.
+    highp float latitudeFunc = 1.0 - borderThickness;
+    highp float inLatitude = step(0.0, latitudeFunc - st.y);
 
     // Map the two calculated indicators to their colors.
-    gl_FragColor = vec4(borderColor.rgb, borderColor.a * inBorder);
-    gl_FragColor = mix(gl_FragColor, contentColor, inBorder * inContent);
+    gl_FragColor = mix(gl_FragColor, borderColor, inBorder);
+    gl_FragColor = mix(gl_FragColor, contentColor, inLatitude*inContent);
 }
