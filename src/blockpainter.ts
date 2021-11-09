@@ -17,7 +17,6 @@ import blockPainterFragmentShaderSimple from "./BlockPainter_FragmentShader_Simp
 
 import blockPainterRoundedFragmentShader from "./BlockPainter_FragmentShader.glsl";
 import blockPainterSquareFragmentShader from "./BlockPainter_SquareFragmentShader.glsl";
-import blockPainterShadyFragmentShader from "./BlockPainter_ShadyFragmentShader.glsl";
 import blockPainterAngleFragmentShader from "./BlockPainter_AngleFragmentShader.glsl";
 import blockPainterParenthesisFragmentShader from "./BlockPainter_ParenthesisFragmentShader.glsl";
 import blockPainterCurlyFragmentShader from "./BlockPainter_CurlyFragmentShader.glsl";
@@ -27,7 +26,6 @@ import { Matrix3x3 } from "parsegraph-matrix";
 export enum BlockType {
   ROUNDED,
   SQUARE,
-  SHADY,
   ANGLE,
   PARENTHESIS,
   CURLY,
@@ -51,9 +49,6 @@ export function getBlockPainterShader(
       break;
     case BlockType.SQUARE:
       fragProgram = blockPainterSquareFragmentShader;
-      break;
-    case BlockType.SHADY:
-      fragProgram = blockPainterShadyFragmentShader;
       break;
     case BlockType.ANGLE:
       fragProgram = blockPainterAngleFragmentShader;
