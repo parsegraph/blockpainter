@@ -8,6 +8,7 @@
     "coverage": "nyc npm run test",
     "test": "mocha -r @babel/register -r jsdom-global/register --recursive",
     "demo": "node demo/demo.js",
+    "autotest": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha --watch",
     "autobuild": "webpack --watch --config webpack.config.js",
     "build": "webpack --config webpack.config.js",
     "build-prod": "NODE_ENV=production webpack --config webpack.prod.js"
