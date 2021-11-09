@@ -1,30 +1,37 @@
-import { compileProgram, GLProvider, ProxyGLProvider, BasicGLProvider } from 'parsegraph-compileprogram';
-import Color from 'parsegraph-color';
-import Rect from 'parsegraph-rect';
+import {
+  compileProgram,
+  GLProvider,
+  ProxyGLProvider,
+  BasicGLProvider,
+} from "parsegraph-compileprogram";
+import Color from "parsegraph-color";
+import Rect from "parsegraph-rect";
 
-import blockPainterVertexShader from './BlockPainter_VertexShader.glsl';
-import blockPainterVertexShaderSimple from './BlockPainter_VertexShader_Simple.glsl';
-import blockPainterFragmentShader from './BlockPainter_FragmentShader.glsl';
+import blockPainterVertexShader from "./BlockPainter_VertexShader.glsl";
+import blockPainterVertexShaderSimple from "./BlockPainter_VertexShader_Simple.glsl";
+import blockPainterFragmentShader from "./BlockPainter_FragmentShader.glsl";
 
-import checkGLError, {ignoreGLErrors, setIgnoreGLErrors} from 'parsegraph-checkglerror';
-
+import checkGLError, {
+  ignoreGLErrors,
+  setIgnoreGLErrors,
+} from "parsegraph-checkglerror";
 
 // Same as above, but using a better antialiasing technique.
-import blockPainterFragmentShaderOESStandardDerivatives from './BlockPainter_FragmentShader_OES_standard_derivatives.glsl';
+import blockPainterFragmentShaderOESStandardDerivatives from "./BlockPainter_FragmentShader_OES_standard_derivatives.glsl";
 
-import blockPainterFragmentShaderSimple from './BlockPainter_FragmentShader_Simple.glsl';
+import blockPainterFragmentShaderSimple from "./BlockPainter_FragmentShader_Simple.glsl";
 // import BlockPainter_SquareFragmentShader from './BlockPainter_SquareFragmentShader.glsl';
 // import BlockPainter_ShadyFragmentShader from './BlockPainter_ShadyFragmentShader.glsl';
 // import BlockPainter_AngleFragmentShader from './BlockPainter_AngleFragmentShader.glsl';
 // import BlockPainter_ParenthesisFragmentShader from './BlockPainter_ParenthesisFragmentShader.glsl';
 // import BlockPainter_CurlyFragmentShader from './BlockPainter_CurlyFragmentShader.glsl';
 
-import {Matrix3x3} from 'parsegraph-matrix';
+import { Matrix3x3 } from "parsegraph-matrix";
 
 let blockPainterCount = 0;
 
 export default class BlockPainter extends ProxyGLProvider {
-  _id:number;
+  _id: number;
   _blockBuffer: WebGLBuffer;
   _blockBufferNumVertices: number;
   _blockBufferVertexIndex: number;
@@ -83,7 +90,7 @@ export default class BlockPainter extends ProxyGLProvider {
     this._dataBufferVertexIndex = 0;
     this._dataBufferNumVertices = 6;
     this._dataBuffer = new Float32Array(
-        (this._dataBufferNumVertices * this._stride) / 4,
+      (this._dataBufferNumVertices * this._stride) / 4
     );
 
     this._maxSize = 0;
@@ -123,9 +130,9 @@ export default class BlockPainter extends ProxyGLProvider {
     this._blockBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this._blockBuffer);
     gl.bufferData(
-        gl.ARRAY_BUFFER,
-        this._stride * 6 * numBlocks,
-        gl.STATIC_DRAW,
+      gl.ARRAY_BUFFER,
+      this._stride * 6 * numBlocks,
+      gl.STATIC_DRAW
     );
     this._blockBufferNumVertices = numBlocks * 6;
   }
@@ -164,13 +171,13 @@ export default class BlockPainter extends ProxyGLProvider {
       this._blockBufferNumVertices
     ) {
       throw new Error(
-          'GL buffer of ' +
+        "GL buffer of " +
           this._blockBufferNumVertices +
-          ' vertices is full; cannot flush all ' +
+          " vertices is full; cannot flush all " +
           this._dataBufferVertexIndex +
-          ' vertices because the GL buffer already has ' +
+          " vertices because the GL buffer already has " +
           this._blockBufferVertexIndex +
-          ' vertices.',
+          " vertices."
       );
     }
     if (this._dataBufferVertexIndex >= this._dataBufferNumVertices) {
@@ -181,9 +188,9 @@ export default class BlockPainter extends ProxyGLProvider {
       //   this._blockBufferVertexIndex +
       //   " of " + this._blockBufferNumVertices + " vertices");
       gl.bufferSubData(
-          gl.ARRAY_BUFFER,
-          this._blockBufferVertexIndex * stride,
-          this._dataBuffer,
+        gl.ARRAY_BUFFER,
+        this._blockBufferVertexIndex * stride,
+        this._dataBuffer
       );
     } else {
       // console.log(
@@ -192,9 +199,9 @@ export default class BlockPainter extends ProxyGLProvider {
       //   "/" + this._blockBufferNumVertices +
       //   " from " + (this._dataBufferVertexIndex*stride/4) + ")");
       gl.bufferSubData(
-          gl.ARRAY_BUFFER,
-          this._blockBufferVertexIndex * stride,
-          this._dataBuffer.slice(0, (this._dataBufferVertexIndex * stride) / 4),
+        gl.ARRAY_BUFFER,
+        this._blockBufferVertexIndex * stride,
+        this._dataBuffer.slice(0, (this._dataBufferVertexIndex * stride) / 4)
       );
     }
     this._blockBufferVertexIndex += this._dataBufferVertexIndex;
@@ -202,13 +209,13 @@ export default class BlockPainter extends ProxyGLProvider {
   }
 
   drawBlock(
-      cx: number,
-      cy: number,
-      width: number,
-      height: number,
-      borderRoundedness: number,
-      borderThickness: number,
-      borderScale: number,
+    cx: number,
+    cy: number,
+    width: number,
+    height: number,
+    borderRoundedness: number,
+    borderThickness: number,
+    borderScale: number
   ): void {
     const gl = this.gl();
     if (gl.isContextLost()) {
@@ -216,37 +223,37 @@ export default class BlockPainter extends ProxyGLProvider {
     }
     if (!this._blockBuffer) {
       throw new Error(
-          'BlockPainter.initBuffer(numBlocks) must be called first.',
+        "BlockPainter.initBuffer(numBlocks) must be called first."
       );
     }
     if (this._blockBufferVertexIndex >= this._blockBufferNumVertices) {
-      throw new Error('BlockPainter is full and cannot draw any more blocks.');
+      throw new Error("BlockPainter is full and cannot draw any more blocks.");
     }
     this._bounds.include(cx, cy, width, height);
-    if (typeof cx !== 'number' || isNaN(cx)) {
-      throw new Error('cx must be a number, but was ' + cx);
+    if (typeof cx !== "number" || isNaN(cx)) {
+      throw new Error("cx must be a number, but was " + cx);
     }
-    if (typeof cy !== 'number' || isNaN(cy)) {
-      throw new Error('cy must be a number, but was ' + cy);
+    if (typeof cy !== "number" || isNaN(cy)) {
+      throw new Error("cy must be a number, but was " + cy);
     }
-    if (typeof width !== 'number' || isNaN(width)) {
-      throw new Error('width must be a number, but was ' + width);
+    if (typeof width !== "number" || isNaN(width)) {
+      throw new Error("width must be a number, but was " + width);
     }
-    if (typeof height !== 'number' || isNaN(height)) {
-      throw new Error('height must be a number, but was ' + height);
+    if (typeof height !== "number" || isNaN(height)) {
+      throw new Error("height must be a number, but was " + height);
     }
-    if (typeof borderRoundedness !== 'number' || isNaN(borderRoundedness)) {
+    if (typeof borderRoundedness !== "number" || isNaN(borderRoundedness)) {
       throw new Error(
-          'borderRoundedness must be a number, but was ' + borderRoundedness,
+        "borderRoundedness must be a number, but was " + borderRoundedness
       );
     }
-    if (typeof borderThickness !== 'number' || isNaN(borderThickness)) {
+    if (typeof borderThickness !== "number" || isNaN(borderThickness)) {
       throw new Error(
-          'borderThickness must be a number, but was ' + borderThickness,
+        "borderThickness must be a number, but was " + borderThickness
       );
     }
-    if (typeof borderScale !== 'number' || isNaN(borderScale)) {
-      throw new Error('borderScale must be a number, but was ' + borderScale);
+    if (typeof borderScale !== "number" || isNaN(borderScale)) {
+      throw new Error("borderScale must be a number, but was " + borderScale);
     }
 
     const buf = this._vertexBuffer;
@@ -321,7 +328,7 @@ export default class BlockPainter extends ProxyGLProvider {
   }
 
   toString(): string {
-    return '[BlockPainter ' + this.id() + ']';
+    return "[BlockPainter " + this.id() + "]";
   }
 
   contextChanged(isLost: boolean) {
@@ -349,59 +356,59 @@ export default class BlockPainter extends ProxyGLProvider {
       let fragProgram = blockPainterFragmentShader;
       // Avoid OES_standard_derivatives on Firefox.
       if (
-        navigator.userAgent.indexOf('Firefox') == -1 &&
-        gl.getExtension('OES_standard_derivatives') != null
+        navigator.userAgent.indexOf("Firefox") == -1 &&
+        gl.getExtension("OES_standard_derivatives") != null
       ) {
         fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
       }
       this._blockProgram = compileProgram(
-          this.glProvider(),
-          'BlockPainter',
-          blockPainterVertexShader,
-          fragProgram,
+        this.glProvider(),
+        "BlockPainter",
+        blockPainterVertexShader,
+        fragProgram
       );
 
       // Cache program locations.
-      this.uWorld = gl.getUniformLocation(this._blockProgram, 'u_world');
+      this.uWorld = gl.getUniformLocation(this._blockProgram, "u_world");
 
-      this.aPosition = gl.getAttribLocation(this._blockProgram, 'a_position');
-      this.aTexCoord = gl.getAttribLocation(this._blockProgram, 'a_texCoord');
-      this.aColor = gl.getAttribLocation(this._blockProgram, 'a_color');
+      this.aPosition = gl.getAttribLocation(this._blockProgram, "a_position");
+      this.aTexCoord = gl.getAttribLocation(this._blockProgram, "a_texCoord");
+      this.aColor = gl.getAttribLocation(this._blockProgram, "a_color");
       this.aBorderColor = gl.getAttribLocation(
-          this._blockProgram,
-          'a_borderColor',
+        this._blockProgram,
+        "a_borderColor"
       );
       this.aBorderRoundedness = gl.getAttribLocation(
-          this._blockProgram,
-          'a_borderRoundedness',
+        this._blockProgram,
+        "a_borderRoundedness"
       );
       this.aBorderThickness = gl.getAttribLocation(
-          this._blockProgram,
-          'a_borderThickness',
+        this._blockProgram,
+        "a_borderThickness"
       );
       this.aAspectRatio = gl.getAttribLocation(
-          this._blockProgram,
-          'a_aspectRatio',
+        this._blockProgram,
+        "a_aspectRatio"
       );
     }
     if (this._blockProgramSimple === null) {
       this._blockProgramSimple = compileProgram(
-          this.glProvider(),
-          'BlockPainterSimple',
-          blockPainterVertexShaderSimple,
-          blockPainterFragmentShaderSimple,
+        this.glProvider(),
+        "BlockPainterSimple",
+        blockPainterVertexShaderSimple,
+        blockPainterFragmentShaderSimple
       );
       this.simpleUWorld = gl.getUniformLocation(
-          this._blockProgramSimple,
-          'u_world',
+        this._blockProgramSimple,
+        "u_world"
       );
       this.simpleAPosition = gl.getAttribLocation(
-          this._blockProgramSimple,
-          'a_position',
+        this._blockProgramSimple,
+        "a_position"
       );
       this.simpleAColor = gl.getAttribLocation(
-          this._blockProgramSimple,
-          'a_color',
+        this._blockProgramSimple,
+        "a_color"
       );
     }
 
@@ -425,8 +432,8 @@ export default class BlockPainter extends ProxyGLProvider {
     const stride = this._stride;
     if (!this._blockBuffer) {
       throw new Error(
-          'No block buffer to render;' +
-          ' BlockPainter.initBuffer(numBlocks) must be called first.',
+        "No block buffer to render;" +
+          " BlockPainter.initBuffer(numBlocks) must be called first."
       );
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, this._blockBuffer);
@@ -440,57 +447,36 @@ export default class BlockPainter extends ProxyGLProvider {
     // AspectRa: 1 * 4 (one float)   56-59
     if (usingSimple) {
       gl.vertexAttribPointer(
-          this.simpleAPosition,
-          2,
-          gl.FLOAT,
-          false,
-          stride,
-          0,
+        this.simpleAPosition,
+        2,
+        gl.FLOAT,
+        false,
+        stride,
+        0
       );
-      gl.vertexAttribPointer(
-          this.simpleAColor,
-          4,
-          gl.FLOAT,
-          false,
-          stride,
-          16,
-      );
+      gl.vertexAttribPointer(this.simpleAColor, 4, gl.FLOAT, false, stride, 16);
     } else {
       gl.vertexAttribPointer(this.aPosition, 2, gl.FLOAT, false, stride, 0);
       gl.vertexAttribPointer(this.aTexCoord, 2, gl.FLOAT, false, stride, 8);
       gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, false, stride, 16);
+      gl.vertexAttribPointer(this.aBorderColor, 4, gl.FLOAT, false, stride, 32);
       gl.vertexAttribPointer(
-          this.aBorderColor,
-          4,
-          gl.FLOAT,
-          false,
-          stride,
-          32,
+        this.aBorderRoundedness,
+        1,
+        gl.FLOAT,
+        false,
+        stride,
+        48
       );
       gl.vertexAttribPointer(
-          this.aBorderRoundedness,
-          1,
-          gl.FLOAT,
-          false,
-          stride,
-          48,
+        this.aBorderThickness,
+        1,
+        gl.FLOAT,
+        false,
+        stride,
+        52
       );
-      gl.vertexAttribPointer(
-          this.aBorderThickness,
-          1,
-          gl.FLOAT,
-          false,
-          stride,
-          52,
-      );
-      gl.vertexAttribPointer(
-          this.aAspectRatio,
-          1,
-          gl.FLOAT,
-          false,
-          stride,
-          56,
-      );
+      gl.vertexAttribPointer(this.aAspectRatio, 1, gl.FLOAT, false, stride, 56);
     }
 
     // console.log(this._blockBufferVertexIndex);
@@ -511,6 +497,4 @@ export default class BlockPainter extends ProxyGLProvider {
   }
 }
 
-export {
-  GLProvider, ProxyGLProvider, BasicGLProvider, Color
-}
+export { GLProvider, ProxyGLProvider, BasicGLProvider, Color };
