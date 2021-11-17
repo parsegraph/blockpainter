@@ -6,7 +6,7 @@
   "types": "dist/parsegraph-blockpainter.d.ts",
   "scripts": {
     "coverage": "nyc npm run test",
-    "test": "mocha -r @babel/register -r jsdom-global/register --recursive",
+    "test": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha",
     "demo": "node demo/demo.js",
     "autotest": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha --watch",
     "autobuild": "webpack --watch --config webpack.config.js",
