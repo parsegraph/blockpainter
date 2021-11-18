@@ -22,20 +22,22 @@ void main() {
     highp float d = length(max(abs(st) - (1.0 - borderRoundedness), 0.0));
 
     // Default antialias implementation.
-    highp float borderTolerance = 0.0;
     highp float inBorder = 1.0 - smoothstep(
-        borderRoundedness - borderTolerance,
-        borderRoundedness + borderTolerance,
+        borderRoundedness,
+        borderRoundedness,
         d
     );
-    highp float edgeWidth = 0.0;
-    highp float inContent = 1.0 - smoothstep(
-        (borderRoundedness - borderThickness) - edgeWidth,
-        (borderRoundedness - borderThickness) + edgeWidth,
-        d
-    );
+    highp float inContent = 0.0;
+    if (borderRoundedness >= borderThickness) {
+        inContent = 1.0 - smoothstep(
+        borderRoundedness - borderThickness,
+        borderRoundedness - borderThickness,
+        d);
+    } else if (abs(st.x) < 1.0 - borderThickness && abs(st.y) < 1.0 - borderThickness) {
+        inContent = 1.0;
+    }
 
     // Map the two calculated indicators to their colors.
     gl_FragColor = vec4(borderColor.rgb, borderColor.a * inBorder);
-    gl_FragColor = mix(gl_FragColor, contentColor, inContent);
+    gl_FragColor = mix(gl_FragColor, contentColor, inBorder * inContent);
 }

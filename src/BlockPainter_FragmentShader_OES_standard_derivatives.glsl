@@ -15,7 +15,6 @@ highp float aastep(float threshold, float value)
 {
     highp float afwidth = 0.9 * length(vec2(dFdx(value), dFdy(value)));
     return smoothstep(threshold - afwidth, threshold + afwidth, value);
-    return step(threshold, value);
 }
 
 void main() {
@@ -31,9 +30,15 @@ void main() {
 
     // Using 'OpenGL insights' antialias implementation
     highp float inBorder = 1.0 - aastep(borderRoundedness, d);
-    highp float inContent = 1.0 - aastep(borderRoundedness - borderThickness, d);
+
+    highp float inContent = 0.0;
+    if (borderRoundedness >= borderThickness) {
+        inContent = 1.0 - aastep(borderRoundedness - borderThickness, d);
+    } else if (abs(st.x) < 1.0 - borderThickness && abs(st.y) < 1.0 - borderThickness) {
+        inContent = 1.0;
+    }
 
     // Map the two calculated indicators to their colors.
     gl_FragColor = vec4(borderColor.rgb, borderColor.a * inBorder);
-    gl_FragColor = mix(gl_FragColor, contentColor, inContent);
+    gl_FragColor = mix(gl_FragColor, contentColor, inBorder * inContent);
 }
