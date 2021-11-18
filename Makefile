@@ -7,7 +7,9 @@ SHADERS = \
 	src/BlockPainter_VertexShader.glsl \
 	src/BlockPainter_FragmentShader.glsl \
 	src/BlockPainter_AngleFragmentShader.glsl \
+	src/BlockPainter_AngleFragmentShader_OES.glsl \
 	src/BlockPainter_CurlyFragmentShader.glsl \
+	src/BlockPainter_CurlyFragmentShader_OES.glsl \
 	src/BlockPainter_VertexShader_Simple.glsl \
 	src/BlockPainter_SquareFragmentShader.glsl \
 	src/BlockPainter_FragmentShader_Simple.glsl \

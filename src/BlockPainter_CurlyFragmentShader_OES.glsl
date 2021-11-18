@@ -24,9 +24,7 @@ void main() {
     st.x = abs(st.x);
     st.y = abs(st.y);
 
-    highp float t = borderRoundedness;
-    highp float inBorder = step(st.y, smoothstep(0.0, t, 1.0 - st.x));
-    t = borderRoundedness - borderThickness;
+    highp float inBorder = step(st.y, smoothstep(0.0, borderRoundedness, 1.0 - st.x));
     highp float inContent = step(1.0, step(st.y, (1.0-borderThickness)*smoothstep(0.0, borderRoundedness, 1.0 - (st.x + borderThickness))));
 
     // Map the two calculated indicators to their colors.

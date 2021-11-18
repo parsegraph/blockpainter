@@ -18,8 +18,11 @@ import blockPainterFragmentShaderSimple from "./BlockPainter_FragmentShader_Simp
 import blockPainterRoundedFragmentShader from "./BlockPainter_FragmentShader.glsl";
 import blockPainterSquareFragmentShader from "./BlockPainter_SquareFragmentShader.glsl";
 import blockPainterAngleFragmentShader from "./BlockPainter_AngleFragmentShader.glsl";
+import blockPainterAngleFragmentShaderOES from "./BlockPainter_AngleFragmentShader_OES.glsl";
+
 import blockPainterParenthesisFragmentShader from "./BlockPainter_ParenthesisFragmentShader.glsl";
 import blockPainterCurlyFragmentShader from "./BlockPainter_CurlyFragmentShader.glsl";
+import blockPainterCurlyFragmentShaderOES from "./BlockPainter_CurlyFragmentShader_OES.glsl";
 
 import { Matrix3x3 } from "parsegraph-matrix";
 
@@ -65,15 +68,14 @@ export function getBlockPainterShader(
   gl: WebGLRenderingContext,
   blockType: BlockType
 ) {
+  const hasOES = navigator.userAgent.indexOf("Firefox") == -1 &&
+        gl.getExtension("OES_standard_derivatives") != null;
   let fragProgram: string;
   switch (blockType) {
     case BlockType.ROUNDED:
       fragProgram = blockPainterRoundedFragmentShader;
       // Avoid OES_standard_derivatives on Firefox.
-      if (
-        navigator.userAgent.indexOf("Firefox") == -1 &&
-        gl.getExtension("OES_standard_derivatives") != null
-      ) {
+      if (hasOES) {
         fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
       }
       break;
@@ -82,11 +84,17 @@ export function getBlockPainterShader(
       break;
     case BlockType.ANGLE:
       fragProgram = blockPainterAngleFragmentShader;
+      if (hasOES) {
+        fragProgram = blockPainterAngleFragmentShaderOES;
+      }
       break;
     case BlockType.PARENTHESIS:
       fragProgram = blockPainterParenthesisFragmentShader;
       break;
     case BlockType.CURLY:
+      if (hasOES) {
+        fragProgram = blockPainterCurlyFragmentShaderOES;
+      }
       fragProgram = blockPainterCurlyFragmentShader;
       break;
     default:

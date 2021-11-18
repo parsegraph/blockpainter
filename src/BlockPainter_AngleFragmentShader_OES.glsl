@@ -13,6 +13,12 @@ varying highp vec2 texCoord;
 varying highp float borderThickness;
 varying highp float aspectRatio;
 
+highp float aastep(float threshold, float value)
+{
+    highp float afwidth = 0.9 * length(vec2(dFdx(value), dFdy(value)));
+    return smoothstep(threshold - afwidth, threshold + afwidth, value);
+}
+
 void main() {
     highp vec2 st = texCoord;
 
@@ -35,13 +41,13 @@ void main() {
     highp float borderFunc = -borderAngle*st.x+1.0/roundness;
 
     // The given position is within the angle if it is under borderFunc.
-    highp float inBorder = step(0.0, borderFunc - st.y);
+    highp float inBorder = aastep(0.0, borderFunc - st.y);
 
     // Determine the content's border by adjusting the borderFunc value.
     highp float contentFunc = -borderAngle*(st.x+borderThickness)+1.0/roundness;
 
     // The given position is within the angle's content if it is under contentFunc.
-    highp float inContent = step(0.0, contentFunc - st.y);
+    highp float inContent = aastep(0.0, contentFunc - st.y);
 
     // Calculate whether the given position is under the latitude.
     highp float latitudeFunc = 1.0 - borderThickness;
@@ -51,3 +57,4 @@ void main() {
     gl_FragColor = mix(gl_FragColor, borderColor, inBorder);
     gl_FragColor = mix(gl_FragColor, contentColor, inLatitude*inContent);
 }
+
