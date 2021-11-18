@@ -300,8 +300,7 @@ export default class BlockPainter extends ProxyGLProvider {
     width: number,
     height: number,
     borderRoundedness: number,
-    borderThickness: number,
-    borderScale: number
+    borderThickness: number
   ): void {
     const gl = this.gl();
     if (gl.isContextLost()) {
@@ -338,9 +337,6 @@ export default class BlockPainter extends ProxyGLProvider {
         "borderThickness must be a number, but was " + borderThickness
       );
     }
-    if (typeof borderScale !== "number" || isNaN(borderScale)) {
-      throw new Error("borderScale must be a number, but was " + borderScale);
-    }
 
     const buf = this._vertexBuffer;
 
@@ -360,12 +356,12 @@ export default class BlockPainter extends ProxyGLProvider {
 
     // Append border radius data.
     if (height < width) {
-      buf[12] = (borderScale * borderRoundedness) / height;
-      buf[13] = (borderScale * borderThickness) / height;
+      buf[12] = borderRoundedness / height;
+      buf[13] = borderThickness / height;
     } else {
       // height > width
-      buf[12] = (borderScale * borderRoundedness) / width;
-      buf[13] = (borderScale * borderThickness) / width;
+      buf[12] = borderRoundedness / width;
+      buf[13] = borderThickness / width;
     }
     buf[14] = height / width;
 
