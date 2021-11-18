@@ -32,14 +32,14 @@ app.get("/", async (req, res) => {
   write(`<!DOCTYPE html>`);
   write(`<html>`);
   write(`<head>`);
-  write(`<title>node</title>`);
+  write(`<title>blockpainter</title>`);
   write(`</head>`);
   write(`<body>`);
   write(
-    `<h1>node <a href='/coverage'>Coverage</a> <a href='/docs'>Docs</a></h1>`
+    `<h1>blockpainter <a href='/coverage'>Coverage</a> <a href='/docs'>Docs</a></h1>`
   );
   write(
-    `<p>This library is available as JavaScript UMD module: <a href='/node.js'>node.js</a></p>`
+    `<p>This library is available as JavaScript UMD module: <a href='/parsegraph-blockpainter.js'>parsegraph-blockpainter.js</a></p>`
   );
   write(`<h2>Samples &amp; Demos</h2>`);
   write(`<ul>`);
