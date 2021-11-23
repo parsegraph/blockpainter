@@ -68,13 +68,11 @@ export function getBlockPainterShader(
   gl: WebGLRenderingContext,
   blockType: BlockType
 ) {
-  const hasOES = navigator.userAgent.indexOf("Firefox") == -1 &&
-        gl.getExtension("OES_standard_derivatives") != null;
+  const hasOES = gl.getExtension("OES_standard_derivatives") != null;
   let fragProgram: string;
   switch (blockType) {
     case BlockType.ROUNDED:
       fragProgram = blockPainterRoundedFragmentShader;
-      // Avoid OES_standard_derivatives on Firefox.
       if (hasOES) {
         fragProgram = blockPainterFragmentShaderOESStandardDerivatives;
       }
