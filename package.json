@@ -1,6 +1,6 @@
 {
   "name": "parsegraph-blockpainter",
-  "version": "1.5.3-dev",
+  "version": "1.5.4-dev",
   "description": "blockpainter",
   "main": "dist/parsegraph-blockpainter.js",
   "types": "dist/parsegraph-blockpainter.d.ts",
