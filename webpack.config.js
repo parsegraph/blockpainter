@@ -14,7 +14,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "parsegraph-blockpainter.js",
     globalObject: "this",
-    library: "parsegraph",
+    library: "parsegraph_blockpainter",
     libraryTarget: "umd",
   },
   module: {
