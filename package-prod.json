@@ -1,6 +1,6 @@
 {
     "name": "parsegraph-blockpainter",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "description": "blockpainter",
     "main": "dist/parsegraph-blockpainter.js",
     "types": "dist/parsegraph-blockpainter.d.ts",
@@ -15,10 +15,10 @@
     },
     "homepage": "https://github.com/parsegraph/blockpainter#readme",
     "dependencies": {
-      "parsegraph-color": "^1.4.4",
+      "parsegraph-color": "^1.4.5",
       "parsegraph-compileprogram": "^2.1.1",
-      "parsegraph-matrix": "^1.4.7",
-      "parsegraph-rect": "^1.4.4"
+      "parsegraph-matrix": "^1.4.8",
+      "parsegraph-rect": "^1.4.5"
     },
     "peerDependencies": {
         "parsegraph-checkglerror": "^1.5.1"
