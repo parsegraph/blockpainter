@@ -1,7 +1,8 @@
 DIST_NAME = blockpainter
 
 SOURCES = \
-	src/blockpainter.ts
+	src/blockpainter.ts \
+	src/demo.ts
 
 SHADERS = \
 	src/BlockPainter_VertexShader.glsl \

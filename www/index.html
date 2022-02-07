@@ -3,9 +3,9 @@
 <head>
     <script src="parsegraph-checkglerror.js"></script>
         <script>
-            parsegraph.setIgnoreGLErrors(false);
+            parsegraph_checkglerror.setIgnoreGLErrors(false);
         </script>
-    <script src="parsegraph-blockpainter.js"></script>
+    <script src="parsegraph-blockpainter.demo.js"></script>
 </head>
 <body>
     <table>
@@ -15,96 +15,43 @@
               <form>
               <div>
                 <label for="blocktype">Block type</label>
-                <select onchange="redraw()" id="blocktype" name="blocktype">
+                <select id="blocktype" name="blocktype">
                     <option>ROUNDED</option>
                     <option>SQUARE</option>
                     <option>ANGLE</option>
                     <option>PARENTHESIS</option>
                     <option>CURLY</option>
+                    <option>SIMPLE</option>
                 </select>
               </div>
               <div>
-                <input oninput="redraw()" type="range" step="any" id="cx" name="cx" min="-1" max="1">
+                <input type="range" step="any" id="cx" name="cx" min="-1" max="1">
                 <label for="cx">cx</label>
               </div>
               <div>
-                <input oninput="redraw()" type="range" step="any" id="cy" name="cy" min="-1" max="1">
+                <input type="range" step="any" id="cy" name="cy" min="-1" max="1">
                 <label for="cy">cy</label>
               </div>
               <div>
-                <input oninput="redraw()" type="range" step="any" id="width" name="width" min="0" max="2">
+                <input type="range" step="any" id="width" name="width" min="0" max="2">
                 <label for="width">width</label>
               </div>
               <div>
-                <input oninput="redraw()" type="range" step="any" id="height" name="height" min="0" max="2">
+                <input type="range" step="any" id="height" name="height" min="0" max="2">
                 <label for="height">height</label>
               </div>
               <div>
-                  <input oninput="redraw()" type="range" step="0.1" id="borderRoundedness" name="borderRoundedness" min="0" max="1">
+                  <input type="range" step="0.1" id="borderRoundedness" name="borderRoundedness" min="0" max="1">
                 <label for="borderRoundedness">borderRoundedness</label>
               </div>
               <div>
-                  <input oninput="redraw()" type="range" step="0.1" id="borderThickness" name="borderThickness" min="0" max="1">
+                  <input type="range" step="0.1" id="borderThickness" name="borderThickness" min="0" max="1">
                 <label for="borderThickness">borderThickness</label>
               </div>
               </form>
             </td>
         </tr>
     </table>
-<script>
-    let ctx = null;
-    document.addEventListener("DOMContentLoaded", function() {
-        ctx = new parsegraph.BasicGLProvider();
-        document.getElementById("gl").appendChild(ctx.container());
-        redraw();
-    });
-
-    function make2DProjection(width, height, flipVertical) {
-      flipVertical = flipVertical === true;
-      // console.log("Making 2D projection (flipVertical=" + flipVertical + ")");
-      flipVertical = flipVertical ? -1 : 1;
-      return [
-        2 / width, 0, 0,
-        0, -2 / (flipVertical * height), 0,
-        -1, flipVertical, 1,
-      ];
-    }
-
-    let bp = null;
-
-    function getFormValue(name) {
-      const val = document.forms[0][name].valueAsNumber;
-      const label = document.forms[0][name].nextElementSibling
-      label.innerHTML = name + "=" + val;
-      return val;
-    }
-    function redraw() {
-      requestAnimationFrame(()=>{
-        if (!bp) {
-          bp = new parsegraph.default(ctx);
-        }
-        bp.initBuffer(1);
-
-        const cx = getFormValue("cx");
-        const cy = getFormValue("cy");
-        const width = getFormValue("width");
-        const height = getFormValue("height");
-        const borderRoundedness = getFormValue("borderRoundedness");
-        const borderThickness = getFormValue("borderThickness");
-        bp.setBlockType(parsegraph.readBlockType(document.getElementById("blocktype").value));
-        bp.setBackgroundColor(new parsegraph.Color(1, 1, 0, 1));
-        bp.setBorderColor(new parsegraph.Color(1, 0, 0, 1));
-        bp.drawBlock(cx, cy, width, height, borderRoundedness, borderThickness);
-        const gl = ctx.gl();
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        ctx.container().style.width = "100%";
-        ctx.container().style.height = "100%";
-        gl.viewport(0, 0, 400, 400);
-        ctx.render();
-        bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, false);
-      });
-    }
-</script>
+    <script src="parsegraph-blockpainter.demo.js"></script>
 </body>
 </html>

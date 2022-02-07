@@ -9,10 +9,13 @@ module.exports = {
       root:"parsegraph_checkglerror"
     }
   },
-  entry: path.resolve(__dirname, "src/blockpainter.ts"),
+  entry: {
+    lib: path.resolve(__dirname, "src/blockpainter.ts"),
+    demo: path.resolve(__dirname, "src/demo.ts"),
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "parsegraph-blockpainter.js",
+    filename: "parsegraph-blockpainter.[name].js",
     globalObject: "this",
     library: "parsegraph_blockpainter",
     libraryTarget: "umd",
