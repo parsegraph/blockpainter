@@ -14,7 +14,7 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-    - run: sudo apt update && sudo apt install libxi-dev mesa-common-dev
+    - run: sudo apt-get update && sudo apt-get install libgif-dev libxi-dev libpango1.0-dev mesa-common-dev
     - uses: actions/checkout@v2
     - run: ls -R
     - name: Use Node.js ${{ matrix.node-version }}
