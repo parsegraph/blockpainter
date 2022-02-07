@@ -27,6 +27,7 @@ import blockPainterCurlyFragmentShaderOES from "./BlockPainter_CurlyFragmentShad
 import { Matrix3x3 } from "parsegraph-matrix";
 
 export enum BlockType {
+  SIMPLE,
   ROUNDED,
   SQUARE,
   ANGLE,
@@ -46,6 +47,8 @@ export function nameBlockType(t: BlockType) {
       return "ANGLE";
     case BlockType.SQUARE:
       return "SQUARE";
+    case BlockType.SIMPLE:
+      return "SIMPLE";
   }
 }
 
@@ -61,6 +64,8 @@ export function readBlockType(g: string) {
       return BlockType.ANGLE;
     case "SQUARE":
       return BlockType.SQUARE;
+    case "SIMPLE":
+      return BlockType.SIMPLE;
   }
 }
 
@@ -103,7 +108,9 @@ export function getBlockPainterShader(
 
 let blockPainterCount = 0;
 
-export default class BlockPainter extends ProxyGLProvider {
+export const SIMPLE_THRESHOLD = 5;
+
+export default class BlockPainter {
   _id: number;
   _blockBuffer: WebGLBuffer;
   _blockBufferNumVertices: number;
@@ -132,8 +139,13 @@ export default class BlockPainter extends ProxyGLProvider {
   simpleAPosition: number;
   simpleAColor: number;
 
-  constructor(window: GLProvider, blockType: BlockType = BlockType.ROUNDED) {
-    super(window);
+  _glProvider: GLProvider;
+
+  constructor(
+    glProvider: GLProvider,
+    blockType: BlockType = BlockType.ROUNDED
+  ) {
+    this._glProvider = glProvider;
     this._id = blockPainterCount++;
 
     // Prepare buffer using prepare(numBlocks).
@@ -172,12 +184,24 @@ export default class BlockPainter extends ProxyGLProvider {
     this._blockType = blockType;
   }
 
+  gl() {
+    return this.glProvider().gl();
+  }
+
+  glProvider() {
+    return this._glProvider;
+  }
+
   bounds(): Rect {
     return this._bounds;
   }
 
   borderColor(): Color {
     return this._borderColor;
+  }
+
+  blockType() {
+    return this._blockType;
   }
 
   setBlockType(blockType: BlockType) {
@@ -198,6 +222,10 @@ export default class BlockPainter extends ProxyGLProvider {
 
   setBackgroundColor(backgroundColor: Color): void {
     this._backgroundColor = backgroundColor;
+  }
+
+  hasBuffer(): boolean {
+    return this._blockBufferNumVertices > 0;
   }
 
   initBuffer(numBlocks: number): void {
@@ -419,75 +447,81 @@ export default class BlockPainter extends ProxyGLProvider {
     }
   }
 
-  render(world: Matrix3x3, scale: number, forceSimple?: boolean) {
+  usingSimple(scale: number = 1) {
+    return (
+      this.blockType() === BlockType.SIMPLE ||
+      this._maxSize * scale < SIMPLE_THRESHOLD
+    );
+  }
+
+  render(world: Matrix3x3, scale: number) {
     this.flush();
     if (this._blockBufferVertexIndex === 0) {
       return;
     }
     const gl = this.gl();
-    const usingSimple = forceSimple || this._maxSize * scale < 5;
+    const usingSimple = this.usingSimple(scale);
     // console.log(this._id, this._maxSize * scale, usingSimple);
 
-    if (this._blockProgram === null) {
-      const fragProgram = getBlockPainterShader(gl, this._blockType);
-
-      this._blockProgram = compileProgram(
-        this.glProvider(),
-        "BlockPainter-" + nameBlockType(this._blockType),
-        blockPainterVertexShader,
-        fragProgram
-      );
-
-      // Cache program locations.
-      this.uWorld = gl.getUniformLocation(this._blockProgram, "u_world");
-
-      this.aPosition = gl.getAttribLocation(this._blockProgram, "a_position");
-      this.aTexCoord = gl.getAttribLocation(this._blockProgram, "a_texCoord");
-      this.aColor = gl.getAttribLocation(this._blockProgram, "a_color");
-      this.aBorderColor = gl.getAttribLocation(
-        this._blockProgram,
-        "a_borderColor"
-      );
-      this.aBorderRoundedness = gl.getAttribLocation(
-        this._blockProgram,
-        "a_borderRoundedness"
-      );
-      this.aBorderThickness = gl.getAttribLocation(
-        this._blockProgram,
-        "a_borderThickness"
-      );
-      this.aAspectRatio = gl.getAttribLocation(
-        this._blockProgram,
-        "a_aspectRatio"
-      );
-    }
-    if (this._blockProgramSimple === null) {
-      this._blockProgramSimple = compileProgram(
-        this.glProvider(),
-        "BlockPainterSimple",
-        blockPainterVertexShaderSimple,
-        blockPainterFragmentShaderSimple
-      );
-      this.simpleUWorld = gl.getUniformLocation(
-        this._blockProgramSimple,
-        "u_world"
-      );
-      this.simpleAPosition = gl.getAttribLocation(
-        this._blockProgramSimple,
-        "a_position"
-      );
-      this.simpleAColor = gl.getAttribLocation(
-        this._blockProgramSimple,
-        "a_color"
-      );
-    }
-
     if (usingSimple) {
+      if (this._blockProgramSimple === null) {
+        this._blockProgramSimple = compileProgram(
+          this.glProvider(),
+          "BlockPainterSimple",
+          blockPainterVertexShaderSimple,
+          blockPainterFragmentShaderSimple
+        );
+        this.simpleUWorld = gl.getUniformLocation(
+          this._blockProgramSimple,
+          "u_world"
+        );
+        this.simpleAPosition = gl.getAttribLocation(
+          this._blockProgramSimple,
+          "a_position"
+        );
+        this.simpleAColor = gl.getAttribLocation(
+          this._blockProgramSimple,
+          "a_color"
+        );
+      }
       gl.useProgram(this._blockProgramSimple);
       gl.uniformMatrix3fv(this.simpleUWorld, false, world);
       gl.enableVertexAttribArray(this.simpleAPosition);
       gl.enableVertexAttribArray(this.simpleAColor);
     } else {
+      if (this._blockProgram === null) {
+        const fragProgram = getBlockPainterShader(gl, this._blockType);
+
+        this._blockProgram = compileProgram(
+          this.glProvider(),
+          "BlockPainter-" + nameBlockType(this._blockType),
+          blockPainterVertexShader,
+          fragProgram
+        );
+
+        // Cache program locations.
+        this.uWorld = gl.getUniformLocation(this._blockProgram, "u_world");
+
+        this.aPosition = gl.getAttribLocation(this._blockProgram, "a_position");
+        this.aTexCoord = gl.getAttribLocation(this._blockProgram, "a_texCoord");
+        this.aColor = gl.getAttribLocation(this._blockProgram, "a_color");
+        this.aBorderColor = gl.getAttribLocation(
+          this._blockProgram,
+          "a_borderColor"
+        );
+        this.aBorderRoundedness = gl.getAttribLocation(
+          this._blockProgram,
+          "a_borderRoundedness"
+        );
+        this.aBorderThickness = gl.getAttribLocation(
+          this._blockProgram,
+          "a_borderThickness"
+        );
+        this.aAspectRatio = gl.getAttribLocation(
+          this._blockProgram,
+          "a_aspectRatio"
+        );
+      }
       gl.useProgram(this._blockProgram);
       gl.uniformMatrix3fv(this.uWorld, false, world);
       gl.enableVertexAttribArray(this.aPosition);
