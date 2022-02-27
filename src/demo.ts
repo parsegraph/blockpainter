@@ -1,20 +1,20 @@
 import Color from "parsegraph-color";
-import {BasicGLProvider, GLProvider} from "parsegraph-compileprogram";
-import BlockPainter, {readBlockType} from "./blockpainter";
+import { BasicGLProvider, GLProvider } from "parsegraph-compileprogram";
+import BlockPainter, { readBlockType } from "./index";
 
-let ctx:GLProvider = null;
-let bp:BlockPainter = null;
+let ctx: GLProvider = null;
+let bp: BlockPainter = null;
 
-function getFormValue(name:string) {
+function getFormValue(name: string) {
   const form = document.forms[0];
   const val = form[name].valueAsNumber;
-  const label = form[name].nextElementSibling
+  const label = form[name].nextElementSibling;
   label.innerHTML = name + "=" + val;
   return val;
 }
 
 function redraw() {
-  requestAnimationFrame(()=>{
+  requestAnimationFrame(() => {
     if (!bp) {
       bp = new BlockPainter(ctx);
     }
@@ -26,7 +26,9 @@ function redraw() {
     const height = getFormValue("height");
     const borderRoundedness = getFormValue("borderRoundedness");
     const borderThickness = getFormValue("borderThickness");
-    const blockTypeField = document.getElementById("blocktype") as HTMLInputElement;
+    const blockTypeField = document.getElementById(
+      "blocktype"
+    ) as HTMLInputElement;
     bp.setBlockType(readBlockType(blockTypeField.value));
     bp.setBackgroundColor(new Color(1, 1, 0, 1));
     bp.setBorderColor(new Color(1, 0, 0, 1));
@@ -42,13 +44,13 @@ function redraw() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   ctx = new BasicGLProvider();
   document.getElementById("gl").appendChild(ctx.container());
-  document.querySelectorAll("form input").forEach(elem=>{
+  document.querySelectorAll("form input").forEach((elem) => {
     elem.addEventListener("input", redraw);
   });
-  document.querySelectorAll("form select").forEach(elem=>{
+  document.querySelectorAll("form select").forEach((elem) => {
     elem.addEventListener("change", redraw);
   });
   redraw();

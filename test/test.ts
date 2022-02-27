@@ -1,4 +1,4 @@
-var assert = require("assert");
+const assert = require("assert");
 import BlockPainter from "../src/index";
 import { BasicGLProvider } from "parsegraph-compileprogram";
 import Color from "parsegraph-color";
@@ -8,7 +8,7 @@ mockDOM(window);
 
 describe("BlockPainter", function () {
   it("works", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -25,7 +25,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, false);
   });
   it("has a simple mode", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -41,7 +41,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, true);
   });
   it("has idempotent initBuffer", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -58,7 +58,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, true);
   });
   it("can be cleared", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -76,7 +76,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, true);
   });
   it("can be resized", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -93,7 +93,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, true);
   });
   it("can be changed in color", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp);
@@ -112,7 +112,7 @@ describe("BlockPainter", function () {
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0, true);
   });
   it("keeps track of its own bounds", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     bp.initBuffer(2);
@@ -122,13 +122,13 @@ describe("BlockPainter", function () {
     assert.ok(bp.bounds());
   });
   it("has an ID", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp.id());
   });
   it("supports toString", () => {
-    let ctx = new BasicGLProvider();
+    const ctx = new BasicGLProvider();
     ctx.setExplicitSize(400, 400);
     const bp = new BlockPainter(ctx);
     assert.ok(bp.toString());
