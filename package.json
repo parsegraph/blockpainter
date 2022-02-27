@@ -2,8 +2,8 @@
   "name": "parsegraph-blockpainter",
   "version": "1.6.0",
   "description": "blockpainter",
-  "main": "dist/parsegraph-blockpainter.js",
-  "types": "dist/parsegraph-blockpainter.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "coverage": "nyc npm run test",
     "test": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha",
