@@ -1,5 +1,5 @@
 var assert = require("assert");
-import BlockPainter from "../dist/parsegraph-blockpainter";
+import BlockPainter from "../src/index";
 import { BasicGLProvider } from "parsegraph-compileprogram";
 import Color from "parsegraph-color";
 
