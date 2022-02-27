@@ -2,7 +2,7 @@ const {webpackConfig, relDir} = require("./webpack.common");
 
 module.exports = {
   entry: {
-    lib: relDir("src/blockpainter.ts"),
+    index: relDir("src/index.ts"),
     demo: relDir("src/demo.ts"),
   },
   ...webpackConfig(false),
