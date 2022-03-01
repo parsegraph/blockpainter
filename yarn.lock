@@ -4516,10 +4516,10 @@ parsegraph-color@^1.4.7:
   resolved "https://registry.yarnpkg.com/parsegraph-color/-/parsegraph-color-1.4.7.tgz#8aa69bd3c93fa8bcc36f6783893716bd752fba87"
   integrity sha512-ZlinbOlbnDDV9F/cHITmUSyZRCjegoTnsWey0CaZx6w0jEFlB9yQCMo6xBgFHcYBdd3DFf9rWisECc5nedsCXA==
 
-parsegraph-compileprogram@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/parsegraph-compileprogram/-/parsegraph-compileprogram-2.2.6.tgz#23a7f34f7de8a8a8d06f441c06a669c2d8a4c434"
-  integrity sha512-CrUiZE0/E94WyIQ5ZpPSE/g+hJNu7pNDXuiyu2SVPdiLWoFX2yolameTU3eSDw2PhAredOM/tJh0LpWJ/HxpSw==
+parsegraph-compileprogram@^2.2.7:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/parsegraph-compileprogram/-/parsegraph-compileprogram-2.2.7.tgz#00c6bb6286c613f179ea15de9150b00f2d6bdcb2"
+  integrity sha512-7++nLb66v0FoVKV1f0Vlkdc6utVEoMiPJ1mlSfbOkey/OJLzgtuPINNkMmMQQK8wb9u1A91Qt38IPaX41DPXXQ==
   dependencies:
     parsegraph-color "^1.4.7"
     parsegraph-method "^1.4.20"
