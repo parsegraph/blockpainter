@@ -17,10 +17,6 @@
   "dependencies": {
     "glslify-loader": "^2.0.0",
     "node-canvas-webgl": "^0.2.6",
-    "parsegraph-color": "^1.4.7",
-    "parsegraph-compileprogram": "^2.2.8",
-    "parsegraph-matrix": "^1.4.11",
-    "parsegraph-rect": "^1.4.7",
     "ts-shader-loader": "^1.0.6",
     "webgl-mock": "^0.1.7"
   },
