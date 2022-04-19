@@ -4590,6 +4590,41 @@ parse5@6.0.1:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
 
+parsegraph-color@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/parsegraph-color/-/parsegraph-color-1.4.7.tgz#8aa69bd3c93fa8bcc36f6783893716bd752fba87"
+  integrity sha512-ZlinbOlbnDDV9F/cHITmUSyZRCjegoTnsWey0CaZx6w0jEFlB9yQCMo6xBgFHcYBdd3DFf9rWisECc5nedsCXA==
+
+parsegraph-compileprogram@^2.2.9:
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/parsegraph-compileprogram/-/parsegraph-compileprogram-2.2.9.tgz#5998b6edfdce7ca9213dd7bd85090cf4e5979d24"
+  integrity sha512-3un9spWrwrgTtn7m/zQX5JO9HTuwt1DSINWBmqIAXba5mQiO6WUZk2BeISOfXto/+ygIcCrF1tnj/Mo0drUuzg==
+  dependencies:
+    parsegraph-color "^1.4.7"
+    parsegraph-method "^1.4.22"
+    parsegraph-rect "^1.4.7"
+    parsegraph-shader "^1.5.6"
+
+parsegraph-matrix@^1.4.11:
+  version "1.4.11"
+  resolved "https://registry.yarnpkg.com/parsegraph-matrix/-/parsegraph-matrix-1.4.11.tgz#a24700c43acc1a75b6723e642ded99f66dcabc47"
+  integrity sha512-sIXuOihQJ1ze2q3YJaKsCvUMmBzCAoXGc1/fdTOaJvnLuRFkaw0aoT/U+zSOv46iT8I55WKAYh50PbPJDVwnFA==
+
+parsegraph-method@^1.4.22:
+  version "1.4.22"
+  resolved "https://registry.yarnpkg.com/parsegraph-method/-/parsegraph-method-1.4.22.tgz#e73605b8f69a6040df3f1e689bde1f26c5b163d2"
+  integrity sha512-7l1YOim5QH+Gc/HQYqBGvRPtyf1EwvjHODcYZIyxrQQVbnjkkG1vrhqIpdm3TlfRl2k9YU0BbfDNY9BmyL/UdA==
+
+parsegraph-rect@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/parsegraph-rect/-/parsegraph-rect-1.4.7.tgz#0d9bf8aa4156dcf7a6f197b461350c290817ad34"
+  integrity sha512-DSaDOeCnqZB2nEopMXahk6Kfv1rZYPSiZNFKkbt8PGUV2eLcoh67zGWuL1FeEn/gxDx+2cAj6JAKPe8aiJ4bsw==
+
+parsegraph-shader@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/parsegraph-shader/-/parsegraph-shader-1.5.6.tgz#1b8bbf47e7e41aca7a4b442ed635335b6f500b46"
+  integrity sha512-nzD9Z3LLXTU9NyGgJ2fx7EVkQqO1p1E5TaYeg++SiNy3grTGN7aY8JdF6qEedm3i6aG6nXt7kxxRoeoHzJUddQ==
+
 path-exists@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"
