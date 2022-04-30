@@ -1,7 +1,7 @@
 import { Matrix3x3 } from "parsegraph-matrix";
 import { compileProgram, GLProvider } from "parsegraph-compileprogram";
 
-import BlockType, {nameBlockType } from "./BlockType";
+import BlockType, { nameBlockType } from "./BlockType";
 import AbstractBlockPainter from "./AbstractBlockPainter";
 
 import blockPainterVertexShader from "./shaders/BlockPainter_VertexShader.glsl";

@@ -35,6 +35,10 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
     this._blocks = [];
   }
 
+  initBuffer(numBlocks:number) {
+    super.initBuffer(numBlocks);
+  }
+
   ctx() {
     return this._ctx;
   }
@@ -79,8 +83,7 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
     const ctx = this.ctx();
     this._blocks.forEach((block) => {
       if (this.usingSimple(scale)) {
-        ctx.strokeStyle = block.borderColor.asRGBA();
-        ctx.fillStyle = block.borderColor.asRGBA();
+        ctx.fillStyle = block.bgColor.asRGBA();
         const { cx, cy, width, height } = block;
         ctx.fillRect(cx - width / 2, cy - height / 2, width, height);
       } else {

@@ -4,6 +4,8 @@ import BlockPainter, { CanvasBlockPainter, readBlockType } from "./index";
 let ctx: CanvasRenderingContext2D = null;
 let bp: BlockPainter = null;
 
+const SIZE = 400;
+
 function getFormValue(name: string) {
   const form = document.forms[0];
   const val = form[name].valueAsNumber;
@@ -14,16 +16,19 @@ function getFormValue(name: string) {
 
 function redraw() {
   requestAnimationFrame(() => {
+    console.log("Drawing");
     if (!bp) {
       bp = new CanvasBlockPainter(ctx);
     }
+    bp.clear();
     bp.initBuffer(1);
 
     const cx = getFormValue("cx");
     const cy = getFormValue("cy");
     const width = getFormValue("width");
     const height = getFormValue("height");
-    const borderRoundedness = getFormValue("borderRoundedness");
+    console.log(width, height);
+    const borderRoundness = getFormValue("borderRoundness");
     const borderThickness = getFormValue("borderThickness");
     const blockTypeField = document.getElementById(
       "blocktype"
@@ -31,13 +36,13 @@ function redraw() {
     bp.setBlockType(readBlockType(blockTypeField.value));
     bp.setBackgroundColor(new Color(1, 1, 0, 1));
     bp.setBorderColor(new Color(1, 0, 0, 1));
-    bp.drawBlock(cx, cy, width, height, borderRoundedness, borderThickness);
-    ctx.canvas.width = 400;
-    ctx.canvas.height = 400;
-    ctx.resetTransform();
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    bp.drawBlock(cx, cy, width*SIZE/2, height*SIZE/2, width*SIZE*borderRoundness/4, width*SIZE*borderThickness/4);
     ctx.canvas.style.width = "100%";
     ctx.canvas.style.height = "100%";
+    ctx.canvas.width = SIZE;
+    ctx.canvas.height = SIZE;
+    ctx.resetTransform();
+    ctx.translate(SIZE/2, SIZE/2);
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0);
   });
 }

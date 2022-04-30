@@ -24,7 +24,7 @@ function redraw() {
     const cy = getFormValue("cy");
     const width = getFormValue("width");
     const height = getFormValue("height");
-    const borderRoundedness = getFormValue("borderRoundedness");
+    const borderRoundness = getFormValue("borderRoundness");
     const borderThickness = getFormValue("borderThickness");
     const blockTypeField = document.getElementById(
       "blocktype"
@@ -32,7 +32,7 @@ function redraw() {
     bp.setBlockType(readBlockType(blockTypeField.value));
     bp.setBackgroundColor(new Color(1, 1, 0, 1));
     bp.setBorderColor(new Color(1, 0, 0, 1));
-    bp.drawBlock(cx, cy, width, height, borderRoundedness, borderThickness);
+    bp.drawBlock(cx, cy, width, height, borderRoundness, borderThickness);
     const gl = ctx.gl();
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

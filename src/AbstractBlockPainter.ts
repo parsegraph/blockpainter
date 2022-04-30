@@ -2,7 +2,7 @@ import BlockPainter from "./BlockPainter";
 import BlockType from "./BlockType";
 import Color from "parsegraph-color";
 import Rect from "parsegraph-rect";
-import {Matrix3x3} from 'parsegraph-matrix';
+import { Matrix3x3 } from "parsegraph-matrix";
 
 export const SIMPLE_THRESHOLD = 5;
 
