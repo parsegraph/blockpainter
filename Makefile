@@ -6,6 +6,8 @@ SCRIPT_FILES = \
 	src/WebGLBlockPainter.ts \
 	src/glsl.d.ts \
 	src/CanvasBlockPainter.ts \
+	src/BlockType.ts \
+	src/canvas.ts \
 	src/AbstractBlockPainter.ts \
 	src/demo.ts \
 	test/test.ts
