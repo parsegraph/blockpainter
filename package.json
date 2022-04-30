@@ -17,9 +17,9 @@
   "dependencies": {
     "glslify-loader": "^2.0.0",
     "parsegraph-color": "^1.4.7",
-    "parsegraph-compileprogram": "^2.2.10",
-    "parsegraph-matrix": "^1.4.11",
-    "parsegraph-rect": "^1.4.7",
+    "parsegraph-compileprogram": "^2.2.14",
+    "parsegraph-matrix": "^1.4.12",
+    "parsegraph-rect": "^1.5.1",
     "ts-shader-loader": "^1.0.6",
     "webgl-mock": "^0.1.7"
   },
