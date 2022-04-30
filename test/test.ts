@@ -3,9 +3,6 @@ import BlockPainter from "../src/index";
 import { BasicGLProvider } from "parsegraph-compileprogram";
 import Color from "parsegraph-color";
 
-import { mockDOM } from "node-canvas-webgl";
-mockDOM(window);
-
 describe("BlockPainter", function () {
   it("works", () => {
     const ctx = new BasicGLProvider();
