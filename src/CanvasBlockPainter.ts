@@ -35,7 +35,7 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
     this._blocks = [];
   }
 
-  initBuffer(numBlocks:number) {
+  initBuffer(numBlocks: number) {
     super.initBuffer(numBlocks);
   }
 
@@ -58,8 +58,8 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
       cy,
       width,
       height,
-      borderRoundness:borderRoundness/2,
-      borderThickness:borderThickness/2,
+      borderRoundness: borderRoundness / 2,
+      borderThickness: borderThickness / 2,
       blockType: this.blockType(),
       bgColor: this.backgroundColor(),
       borderColor: this.borderColor(),
