@@ -1,9 +1,8 @@
-import AbstractBlockPainter from "./AbstractBlockPainter";
-
-import { BlockType } from "./BlockPainter";
-
 import Color from "parsegraph-color";
 import { Matrix3x3 } from "parsegraph-matrix";
+
+import AbstractBlockPainter from "./AbstractBlockPainter";
+import BlockType from "./BlockType";
 
 class CanvasBlock {
   cx: number;

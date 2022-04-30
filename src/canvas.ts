@@ -1,8 +1,7 @@
 import Color from "parsegraph-color";
-import { BasicGLProvider, GLProvider } from "parsegraph-compileprogram";
-import BlockPainter, { WebGLBlockPainter, readBlockType } from "./index";
+import BlockPainter, { CanvasBlockPainter, readBlockType } from "./index";
 
-let ctx: GLProvider = null;
+let ctx: CanvasRenderingContext2D = null;
 let bp: BlockPainter = null;
 
 function getFormValue(name: string) {
@@ -16,7 +15,7 @@ function getFormValue(name: string) {
 function redraw() {
   requestAnimationFrame(() => {
     if (!bp) {
-      bp = new WebGLBlockPainter(ctx);
+      bp = new CanvasBlockPainter(ctx);
     }
     bp.initBuffer(1);
 
@@ -33,20 +32,20 @@ function redraw() {
     bp.setBackgroundColor(new Color(1, 1, 0, 1));
     bp.setBorderColor(new Color(1, 0, 0, 1));
     bp.drawBlock(cx, cy, width, height, borderRoundedness, borderThickness);
-    const gl = ctx.gl();
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    ctx.container().style.width = "100%";
-    ctx.container().style.height = "100%";
-    gl.viewport(0, 0, 400, 400);
-    ctx.render();
+    ctx.canvas.width = 400;
+    ctx.canvas.height = 400;
+    ctx.resetTransform();
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.canvas.style.width = "100%";
+    ctx.canvas.style.height = "100%";
     bp.render([1, 0, 0, 0, 1, 0, 0, 0, 1], 1000.0);
   });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  ctx = new BasicGLProvider();
-  document.getElementById("gl").appendChild(ctx.container());
+  const canvas = document.createElement("canvas");
+  ctx = canvas.getContext("2d");
+  document.getElementById("gl").appendChild(canvas);
   document.querySelectorAll("form input").forEach((elem) => {
     elem.addEventListener("input", redraw);
   });

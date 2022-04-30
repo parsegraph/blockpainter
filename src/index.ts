@@ -1,14 +1,16 @@
 import BlockPainter, {
-  BlockType,
+} from "./BlockPainter";
+import
+  BlockType, {
   nameBlockType,
   readBlockType,
-} from "./BlockPainter";
+} from "./BlockType";
 import AbstractBlockPainter from "./AbstractBlockPainter";
 import WebGLBlockPainter from "./WebGLBlockPainter";
 import CanvasBlockPainter from "./CanvasBlockPainter";
 
+export default BlockPainter;
 export {
-  BlockPainter,
   AbstractBlockPainter,
   WebGLBlockPainter,
   CanvasBlockPainter,

@@ -1,7 +1,8 @@
-import { BlockType, nameBlockType } from "./BlockPainter";
-import AbstractBlockPainter from "./AbstractBlockPainter";
-
+import { Matrix3x3 } from "parsegraph-matrix";
 import { compileProgram, GLProvider } from "parsegraph-compileprogram";
+
+import BlockType, {nameBlockType } from "./BlockType";
+import AbstractBlockPainter from "./AbstractBlockPainter";
 
 import blockPainterVertexShader from "./shaders/BlockPainter_VertexShader.glsl";
 import blockPainterVertexShaderSimple from "./shaders/BlockPainter_VertexShader_Simple.glsl";
@@ -19,8 +20,6 @@ import blockPainterAngleFragmentShaderOES from "./shaders/BlockPainter_AngleFrag
 import blockPainterParenthesisFragmentShader from "./shaders/BlockPainter_ParenthesisFragmentShader.glsl";
 import blockPainterCurlyFragmentShader from "./shaders/BlockPainter_CurlyFragmentShader.glsl";
 import blockPainterCurlyFragmentShaderOES from "./shaders/BlockPainter_CurlyFragmentShader_OES.glsl";
-
-import { Matrix3x3 } from "parsegraph-matrix";
 
 function getBlockPainterShader(
   gl: WebGLRenderingContext,
@@ -134,13 +133,13 @@ export default class WebGLBlockPainter extends AbstractBlockPainter {
   }
 
   initBuffer(numBlocks: number): void {
+    super.initBuffer(numBlocks);
     if (this._blockBufferNumVertices / 6 === numBlocks) {
       // Same number of blocks, so just reset the counters and overwrite.
       this._blockBufferVertexIndex = 0;
       this._dataBufferVertexIndex = 0;
       return;
     }
-    super.initBuffer(numBlocks);
     const gl = this.gl();
     this._blockBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this._blockBuffer);

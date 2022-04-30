@@ -1,10 +1,12 @@
-import BlockPainter, { BlockType } from "./BlockPainter";
+import BlockPainter from "./BlockPainter";
+import BlockType from "./BlockType";
 import Color from "parsegraph-color";
 import Rect from "parsegraph-rect";
+import {Matrix3x3} from 'parsegraph-matrix';
 
 export const SIMPLE_THRESHOLD = 5;
 
-export default class AbstractBlockPainter implements BlockPainter {
+export default abstract class AbstractBlockPainter implements BlockPainter {
   private _backgroundColor: Color;
   private _borderColor: Color;
   private _bounds: Rect;
@@ -12,6 +14,8 @@ export default class AbstractBlockPainter implements BlockPainter {
   private _maxSize: number;
   private _numAllocated: number;
   private _numDrawn: number;
+
+  abstract render(world: Matrix3x3, scale: number): void;
 
   constructor(blockType: BlockType = BlockType.ROUNDED) {
     // Setup initial uniform values.
@@ -28,8 +32,10 @@ export default class AbstractBlockPainter implements BlockPainter {
   }
 
   initBuffer(numBlocks: number) {
-    this.clear();
     this._numAllocated = numBlocks;
+    this._bounds.toNaN();
+    this._maxSize = 0;
+    this._numDrawn = 0;
   }
 
   hasBuffer() {
@@ -72,9 +78,7 @@ export default class AbstractBlockPainter implements BlockPainter {
   }
 
   clear() {
-    this._bounds.toNaN();
-    this._maxSize = 0;
-    this._numDrawn = 0;
+    this.initBuffer(0);
   }
 
   usingSimple(scale: number = 1) {
