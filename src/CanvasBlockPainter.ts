@@ -106,16 +106,18 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
           borderRoundness
         );
         ctx.fill();
-        ctx.strokeStyle = borderColor.asRGBA();
-        ctx.lineWidth = borderThickness;
-        this.strokeRoundedRect(
-          cx + borderThickness / 2 - width / 2,
-          cy + borderThickness / 2 - height / 2,
-          width - borderThickness,
-          height - borderThickness,
-          borderRoundness
-        );
-        ctx.stroke();
+        if (borderThickness > 0) {
+          ctx.strokeStyle = borderColor.asRGBA();
+          ctx.lineWidth = borderThickness;
+          this.strokeRoundedRect(
+            cx + borderThickness / 2 - width / 2,
+            cy + borderThickness / 2 - height / 2,
+            width - borderThickness,
+            height - borderThickness,
+            borderRoundness
+          );
+          ctx.stroke();
+        }
       }
     });
   }
