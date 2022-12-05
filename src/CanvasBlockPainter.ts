@@ -97,7 +97,7 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
           borderRoundness,
           borderThickness,
         } = block;
-        ctx.fillStyle = bgColor.asRGB();
+        ctx.fillStyle = bgColor.asRGBA();
         this.strokeRoundedRect(
           cx + borderThickness / 2 - width / 2,
           cy + borderThickness / 2 - height / 2,
