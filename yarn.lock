@@ -3990,17 +3990,17 @@ parsegraph-checkglerror@^1.5.3:
   resolved "https://registry.yarnpkg.com/parsegraph-checkglerror/-/parsegraph-checkglerror-1.5.3.tgz#e3f55c6d014308cf7450fcf3ff7b4a8d0b799f3e"
   integrity sha512-oC6zJlN6jmYw0EN4UEef56mOQclxfo7NPHehZpgg0lmvB4IsipxRmBN87wJneF8uOCx9lqhZd5F7hajGw8WTGw==
 
-parsegraph-color@^1.4.7:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/parsegraph-color/-/parsegraph-color-1.4.7.tgz#8aa69bd3c93fa8bcc36f6783893716bd752fba87"
-  integrity sha512-ZlinbOlbnDDV9F/cHITmUSyZRCjegoTnsWey0CaZx6w0jEFlB9yQCMo6xBgFHcYBdd3DFf9rWisECc5nedsCXA==
+parsegraph-color@^1.4.8:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/parsegraph-color/-/parsegraph-color-1.4.8.tgz#019920c2c9d3a6f320ec409c1c22b3a770879388"
+  integrity sha512-e0nDzZJXQCH1BXCahSfyiDMdd8cU5PcOD/IuUn0005EsSB+U5YT7Itg6LOlVGdor1kOnOMz5d2Pe+jQ+6XHkzg==
 
-parsegraph-compileprogram@^2.2.16:
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/parsegraph-compileprogram/-/parsegraph-compileprogram-2.2.16.tgz#8c6afb6b56dd3c15af08cf44a3de0f59b4586ecc"
-  integrity sha512-HznKsYltMu/rXIt9RO2PTREmUWplWQE6sV3+QmHzINFdRMx3tICMyEyOb4f8lvckeAsWdMyHApNUOdNd9UDjpg==
+parsegraph-compileprogram@^2.2.17:
+  version "2.2.17"
+  resolved "https://registry.yarnpkg.com/parsegraph-compileprogram/-/parsegraph-compileprogram-2.2.17.tgz#7eac6688ee0d5c48eaca2bb9da26ca1251402590"
+  integrity sha512-Jb8IXjvgEMgnurdv9mZmsvLrejA4H4fa6xbDRGTtiIUUxtCR9no87DpfoJB7S5XUd2duClcCVoY2wBEWa3IuIg==
   dependencies:
-    parsegraph-color "^1.4.7"
+    parsegraph-color "^1.4.8"
     parsegraph-method "^1.4.22"
     parsegraph-rect "^1.5.1"
     parsegraph-shader "^1.5.6"
