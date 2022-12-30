@@ -15,11 +15,11 @@
   },
   "homepage": "https://github.com/parsegraph/blockpainter#readme",
   "dependencies": {
-    "parsegraph-compileprogram": "^2.2.17",
-    "parsegraph-matrix": "^1.4.12"
+    "parsegraph-compileprogram": "^2.2.18",
+    "parsegraph-matrix": "^1.4.13"
   },
   "peerDependencies": {
-    "parsegraph-checkglerror": "^1.5.3"
+    "parsegraph-checkglerror": "^1.5.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
@@ -44,7 +44,7 @@
     "jest": "^28.0.3",
     "jsdom": "^19.0.0",
     "jsdom-global": "^3.0.2",
-    "parsegraph-checkglerror": "^1.5.3",
+    "parsegraph-checkglerror": "^1.5.4",
     "prettier": "^2.6.2",
     "raw-loader": "^4.0.2",
     "source-map-loader": "^3.0.1",
