@@ -17,7 +17,7 @@
   "dependencies": {
     "parsegraph-color": "^1.4.11",
     "parsegraph-compileprogram": "^2.2.18",
-    "parsegraph-matrix": "^1.4.13",
+    "parsegraph-matrix": "^1.4.14",
     "parsegraph-rect": "^1.5.3"
   },
   "peerDependencies": {
