@@ -21,11 +21,11 @@
     "parsegraph-rect": "^1.5.3"
   },
   "peerDependencies": {
-    "parsegraph-checkglerror": "^1.5.6"
+    "parsegraph-checkglerror": "^1.5.7"
   },
   "devDependencies": {
     "glslify-loader": "^2.0.0",
-    "parsegraph-checkglerror": "^1.5.6",
+    "parsegraph-checkglerror": "^1.5.7",
     "ts-shader-loader": "^2.0.2",
     "webgl-mock": "^0.1.7"
   }
