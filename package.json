@@ -15,10 +15,10 @@
   },
   "homepage": "https://github.com/parsegraph/blockpainter#readme",
   "dependencies": {
-    "parsegraph-color": "^1.4.12",
-    "parsegraph-compileprogram": "^2.2.21",
-    "parsegraph-matrix": "^1.4.15",
-    "parsegraph-rect": "^1.5.4"
+    "parsegraph-color": "^1.4.13",
+    "parsegraph-compileprogram": "^2.2.22",
+    "parsegraph-matrix": "^1.4.16",
+    "parsegraph-rect": "^1.5.5"
   },
   "peerDependencies": {
     "parsegraph-checkglerror": "^1.5.8"
