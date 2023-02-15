@@ -2,7 +2,7 @@ import Color from "parsegraph-color";
 import BlockPainter, { CanvasBlockPainter, readBlockType } from "./index";
 
 let ctx: CanvasRenderingContext2D = null;
-let bp: BlockPainter = null;
+let bp: CanvasBlockPainter = null;
 
 const SIZE = 400;
 
@@ -11,6 +11,12 @@ function getFormValue(name: string) {
   const val = form[name].valueAsNumber;
   const label = form[name].nextElementSibling;
   label.innerHTML = name + "=" + val;
+  return val;
+}
+
+function getFormChecked(name: string) {
+  const form = document.forms[0];
+  const val = form[name].checked;
   return val;
 }
 
@@ -30,6 +36,7 @@ function redraw() {
     console.log(width, height);
     const borderRoundness = getFormValue("borderRoundness");
     const borderThickness = getFormValue("borderThickness");
+    const dashed = getFormChecked("dashed");
     const blockTypeField = document.getElementById(
       "blocktype"
     ) as HTMLInputElement;
@@ -42,7 +49,8 @@ function redraw() {
       (width * SIZE) / 2,
       (height * SIZE) / 2,
       (width * SIZE * borderRoundness) / 2,
-      (width * SIZE * borderThickness) / 2
+      (width * SIZE * borderThickness) / 2,
+      dashed ? [20, 10] : []
     );
     ctx.canvas.style.width = "100%";
     ctx.canvas.style.height = "100%";

@@ -14,6 +14,7 @@ class CanvasBlock {
   borderRoundness: number;
   borderThickness: number;
   blockType: BlockType;
+  dashed: number[]
 }
 
 export default class CanvasBlockPainter extends AbstractBlockPainter {
@@ -49,7 +50,8 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
     width: number,
     height: number,
     borderRoundness: number,
-    borderThickness: number
+    borderThickness: number,
+    dashed: number[] = null
   ): void {
     super.drawBlock(cx, cy, width, height, borderRoundness, borderThickness);
 
@@ -63,6 +65,7 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
       blockType: this.blockType(),
       bgColor: this.backgroundColor(),
       borderColor: this.borderColor(),
+      dashed
     });
   }
 
@@ -98,6 +101,11 @@ export default class CanvasBlockPainter extends AbstractBlockPainter {
           borderThickness,
         } = block;
         ctx.fillStyle = bgColor.asRGBA();
+        if (block.dashed) {
+          ctx.setLineDash(block.dashed);
+        } else {
+          ctx.setLineDash([]);
+        }
         this.strokeRoundedRect(
           cx + borderThickness / 2 - width / 2,
           cy + borderThickness / 2 - height / 2,
